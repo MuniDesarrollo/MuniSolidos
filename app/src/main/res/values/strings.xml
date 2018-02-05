@@ -12,4 +12,5 @@
     <string name="hint_correo">ejemplo@email.com</string>
     <string name="Text_btn_crearCiudadano">REGISTRARME</string>
     <string name="toolbar_titulo_createciudadano">CREAR CUENTA</string>
+    <string name="Text_btn_ReportarSolidos">REPORTAR</string>
 </resources>

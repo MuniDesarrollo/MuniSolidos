@@ -16,17 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.CreateCiudadanoActivity"
-                  android:parentActivityName=".LoginActivity">
-        <meta-data android:name="android.support.PARENT_ACTIVITY"
-            android:value=".LoginActivity">
-
-        </meta-data>
+        <activity
+            android:name=".view.CreateCiudadanoActivity"
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
         </activity>
         <activity
             android:name=".ReferenciasActivity"
             android:label="@string/title_activity_referencias"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".view.ReporteSolidosActivity"></activity>
     </application>
 
 </manifest>
