@@ -16,7 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.CreateCiudadanoActivity"></activity>
+        <activity android:name=".view.CreateCiudadanoActivity" />
+        <activity
+            android:name=".ReferenciasActivity"
+            android:label="@string/title_activity_referencias"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
