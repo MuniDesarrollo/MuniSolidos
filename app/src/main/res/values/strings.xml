@@ -3,7 +3,13 @@
     <string name="title_activity_referencias">ReferenciasActivity</string>
     <string name="hint_UserName">Nombre de usuario</string>
     <string name="hint_Contraseña">Contraseña</string>
-    <string name="Text_btn_login">CREAR</string>
+    <string name="Text_btn_login">INICIAR SESION</string>
     <string name="no_tienes_cuenta">No tines cuenta ?, </string>
     <string name="create_cuenta">Crea una aquí</string>
+    <string name="hint_dni">DNI</string>
+    <string name="hint_nombres">Nombres</string>
+    <string name="hint_apellidos">Apellidos</string>
+    <string name="hint_correo">ejemplo@email.com</string>
+    <string name="Text_btn_crearCiudadano">REGISTRARME</string>
+    <string name="toolbar_titulo_createciudadano">CREAR CUENTA</string>
 </resources>
