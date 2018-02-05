@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.carlin.munisolidos.view.CreateCiudadanoActivity;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
@@ -21,7 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btnLogin;
     EditText txtUsuario,txtCOntraseña;
@@ -36,15 +37,46 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin=(Button)findViewById(R.id.btnLogin);
 
+        btnLogin.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        //metodo de registro de ciudadano
+
+        Thread tr=new Thread()
+        {
+            @Override
+            public void run() {
+                final String resultado=enviarDatosGET(txtUsuario.getText().toString(),txtCOntraseña.getText().toString());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int r=obtDatosJSON(resultado);
+                        if (r>0)
+                        {
+                            Intent intn=new Intent(getApplicationContext(), ReporteSolidosActivity.class);
+                            startActivity(intn);
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(),"usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        };
+        tr.start();
     }
     //ruta de la vista reporte
-
+/*
     public void goreporteCiudadano(View view)
     {
         Intent intn=new Intent(this, ReporteSolidosActivity.class);
         startActivity(intn);
     }
-
+*/
     //funcion que muestra la vista de registrar Ciudadano---
     public void goCreateCiudadano(View view)
     {
@@ -101,4 +133,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return res;
     }
+
+
 }
