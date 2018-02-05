@@ -10,6 +10,8 @@ import android.widget.EditText;
 import com.example.carlin.munisolidos.view.CreateCiudadanoActivity;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
 
+import org.json.JSONArray;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,5 +83,22 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return resul.toString();
+    }
+
+    public int obtDatosJSON(String response)
+    {
+        int res=0;
+        try
+        {
+            JSONArray json=new JSONArray(response);
+            if (json.length()>0)//verificamos los elementos de json
+            {
+                res=1;
+            }
+        }catch (Exception e)
+        {
+
+        }
+        return res;
     }
 }

@@ -5,9 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.carlin.munisolidos.view.ReporteSolidosActivity">
+    tools:context="com.example.carlin.munisolidos.view.ReporteSolidosActivity"
+    android:background="@color/colorPrimary">
 
     <include layout="@layout/actionbar_toolbar"></include>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,22 +19,86 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/activity_vertical_margin"
-            android:orientation="vertical">
-            <TextView
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Welcom"
-                android:textColor="@color/editTextColorBlack"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <ImageView
+                    android:id="@+id/imgReporte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/logoabc"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="0.4">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_Tipo_solido"
+                        android:theme="@dimen/textsize_notienecuenta"
+                        android:id="@+id/textView" />
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/txtTipoSolidos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_Tiporesiduo"
+                            android:theme="@style/EditTextBlack"
+                            android:layout_marginTop="@dimen/edittext_margin_createciudadano">
+
+                        </android.support.design.widget.TextInputEditText>
+
+                        <Button
+                           android:id="@+id/btnTomarFoto"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="@string/Text_btn_tomaFoto"
+                           android:theme="@style/RaisedButtonDark"
+                           android:onClick="goreporteCiudadano"
+                            android:layout_toRightOf="@id/txtTipoSolidos"
+                            android:layout_marginTop="@dimen/edittext_margin_createciudadano"
+                           />
+
+                    <Button
+                        android:id="@+id/btnUbicacionResiduo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_btn_UbicacionResiduo"
+                        android:layout_below="@+id/btnTomarFoto"
+                        android:layout_marginTop="23dp"
+                        android:theme="@style/RaisedButtonDark"/>
+
+                    <Button
+                        android:id="@+id/btnReportar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Text_btn_ReportarSolidos"
+                        android:layout_below="@+id/btnTomarFoto"
+                        android:layout_toRightOf="@id/btnUbicacionResiduo"
+                        android:layout_marginTop="23dp"
+                        android:theme="@style/RaisedButtonDark"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
 
-            <Button
-                android:id="@+id/btnreportar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Text_btn_ReportarSolidos"
-                android:theme="@style/RaisedButtonDark"
-                />
+
         </LinearLayout>
 
     </ScrollView>
