@@ -22,5 +22,4 @@ public class ReporteSolidosActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(titulo);//asigna el titulo al toobar
         getSupportActionBar().setDisplayHomeAsUpEnabled(upButton); //asigna la flecha de regreso al toolbar
     }
-
 }

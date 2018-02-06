@@ -24,7 +24,7 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnLogin;
+    Button btLogin;
     EditText txtUsuario,txtCOntraseña;
 
     @Override
@@ -32,51 +32,59 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        txtUsuario=(EditText)findViewById(R.id.txtUsuario);
-        txtCOntraseña=(EditText)findViewById(R.id.txtContraseña);
+        txtUsuario=(EditText)findViewById(R.id.txtusuario);
+        txtCOntraseña=(EditText)findViewById(R.id.txtcontrasenia);
 
-        btnLogin=(Button)findViewById(R.id.btnLogin);
+        btLogin=(Button)findViewById(R.id.btnLogin);
 
-        btnLogin.setOnClickListener(this);
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        //metodo de registro de ciudadano
-
-        Thread tr=new Thread()
-        {
+        btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                final String resultado=enviarDatosGET(txtUsuario.getText().toString(),txtCOntraseña.getText().toString());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        int r=obtDatosJSON(resultado);
-                        if (r>0)
-                        {
-                            Intent intn=new Intent(getApplicationContext(), ReporteSolidosActivity.class);
-                            startActivity(intn);
+            public void onClick(View view) {
+
+                    Thread tr=new Thread()
+                    {
+                        @Override
+                        public void run() {
+                            final String resultado=enviarDatosGET(txtUsuario.getText().toString(),txtCOntraseña.getText().toString());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run()
+                                {
+                                    int r=obtDatosJSON(resultado);
+                                    if (r>0)
+                                    {
+                                        Intent intn=new Intent(getApplicationContext(), ReporteSolidosActivity.class);
+                                        startActivity(intn);
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(getApplicationContext(),"usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                         }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(),"usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-            }
-        };
-        tr.start();
+                    };
+                    tr.start();
+                }
+
+        });
+
+
     }
+
     //ruta de la vista reporte
-/*
+
     public void goreporteCiudadano(View view)
     {
-        Intent intn=new Intent(this, ReporteSolidosActivity.class);
-        startActivity(intn);
+        if (txtUsuario.getText().toString().equals("carlin") && txtCOntraseña.getText().toString().equals("123")) {
+            Intent intn = new Intent(this, ReporteSolidosActivity.class);
+            startActivity(intn);
+        }else
+        {
+            Toast.makeText(getApplicationContext(),"usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
+        }
     }
-*/
+
     //funcion que muestra la vista de registrar Ciudadano---
     public void goCreateCiudadano(View view)
     {
@@ -135,4 +143,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
+    @Override
+    public void onClick(View view) {
+
+
+    }
 }
