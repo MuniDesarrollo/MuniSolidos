@@ -51,7 +51,9 @@ public class LoginActivity extends AppCompatActivity  {
                        runOnUiThread(new Runnable() {
                            @Override
                            public void run() {
+                               Toast.makeText(getApplicationContext(),"r="+res,Toast.LENGTH_LONG).show();
                                int r=obtDatosJSON(res);
+                              // Toast.makeText(getApplicationContext(),"r="+r,Toast.LENGTH_LONG).show();
                                if (r>0)
                                {
                                    Intent intent=new Intent(getApplicationContext(),ReporteSolidosActivity.class);
@@ -94,33 +96,30 @@ public class LoginActivity extends AppCompatActivity  {
 
     public String enviarPost(String usu, String pas)
     {
-        String parametros="usu="+usu+"&pas="+pas;
+        String parametros="usuario="+usu+"&contrasenia="+pas;
         HttpURLConnection conexion=null;
         String respuesta="";
         try
         {
-            URL url=new URL("http://192.168.15.18:80/AppSolidos/validacionAcceso.php");
+            URL url=new URL("http://192.168.15.18/AppSolidos/validacionAcceso.php");
             conexion=(HttpURLConnection)url.openConnection();
-            conexion.setRequestMethod("GET");
+            conexion.setRequestMethod("POST");
             conexion.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
 
             conexion.setDoOutput(true);
             DataOutputStream wr=new DataOutputStream(conexion.getOutputStream());
             wr.writeBytes(parametros);
+            //..................................................................
             wr.close();
             Scanner inStream=new Scanner(conexion.getErrorStream());
 
-            while(inStream.hasNextLine())
+            while (inStream.hasNextLine())
                 respuesta+=(inStream.nextLine());
 
-        }catch (Exception e)
-        {
-
-        }
+        }catch (Exception e){}
 
         return respuesta.toString();
     }
-
 
     public int obtDatosJSON(String response)
     {
