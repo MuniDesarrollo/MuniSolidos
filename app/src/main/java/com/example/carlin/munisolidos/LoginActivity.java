@@ -15,14 +15,16 @@ import org.json.JSONArray;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity  {
 
     Button btLogin;
     EditText txtUsuario,txtCOntraseña;
@@ -37,43 +39,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btLogin=(Button)findViewById(R.id.btnLogin);
 
-        btLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+       btLogin.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Thread tr= new Thread()
+               {
+                  // String res=enviarDatosGET(txtUsuario.getText().toString(), txtCOntraseña.getText().toString());
 
-                    Thread tr=new Thread()
-                    {
-                        @Override
-                        public void run() {
-                            final String resultado=enviarDatosGET(txtUsuario.getText().toString(),txtCOntraseña.getText().toString());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run()
-                                {
-                                    int r=obtDatosJSON(resultado);
-                                    if (r>0)
-                                    {
-                                        Intent intn=new Intent(getApplicationContext(), ReporteSolidosActivity.class);
-                                        startActivity(intn);
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(getApplicationContext(),"usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
-                        }
-                    };
-                    tr.start();
-                }
-
-        });
-
-
+               };
+           }
+       });
     }
 
     //ruta de la vista reporte
-
+/*
     public void goreporteCiudadano(View view)
     {
         if (txtUsuario.getText().toString().equals("carlin") && txtCOntraseña.getText().toString().equals("123")) {
@@ -84,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(getApplicationContext(),"usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
         }
     }
-
+*/
     //funcion que muestra la vista de registrar Ciudadano---
     public void goCreateCiudadano(View view)
     {
@@ -94,36 +73,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     //funcion que insertara campos a la base de datos mediante URL
 
-    public  String enviarDatosGET(String usu, String pas)
+    public String enviarPost(String usu, String pas)
     {
-        URL url=null;
-        String linea;
-        int respuesta;
-        StringBuilder resul=null;
-
+        String parametros="usu="+usu+"&pas="+pas;
+        HttpURLConnection conexion=null;
+        String respuesta="";
         try
         {
-            url =new URL("http://192.168.15.18:80/AppSolidos/validacionAcceso.php?usuario="+usu+"&contrasenia="+pas);
-            HttpURLConnection conexion=(HttpURLConnection)url.openConnection();//abre la conexion de la url
-            respuesta=conexion.getResponseCode();//muestra la respuesta de la conexion
+            URL url=new URL("http://192.168.15.18/AppSolidos/validacionAcceso.php?usuario=carlin&contrasenia=1234");
+            conexion=(HttpURLConnection)url.openConnection();
+            conexion.setRequestMethod("POST");
+            conexion.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
 
-            if (respuesta==HttpURLConnection.HTTP_OK)//verificamos la conexion a la data base mediante la url
-            {
-                InputStream in =new BufferedInputStream(conexion.getInputStream());//obtenemos la conexion
-                BufferedReader reader=new BufferedReader(new InputStreamReader(in));//leemos los datos que se obtuvieron de la url
+            conexion.setDoOutput(true);
+            DataOutputStream wr=new DataOutputStream(conexion.getOutputStream());
+            wr.writeBytes(parametros);
+            wr.close();
 
-                while ((linea=reader.readLine())!=null)
-                {
-                    resul.append(linea);
-                }
-            }
+            Scanner inStream=new Scanner(conexion.getErrorStream());
+
+            while(inStream.hasNextLine())
+                respuesta+=(inStream.nextLine());
+
+        }catch (Exception e)
+        {
 
         }
-         catch (IOException e) {
-            e.printStackTrace();
-        }
-        return resul.toString();
+
+        return respuesta.toString();
     }
+
 
     public int obtDatosJSON(String response)
     {
@@ -143,9 +122,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    @Override
-    public void onClick(View view) {
-
-
-    }
 }
