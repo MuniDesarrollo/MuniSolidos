@@ -78,14 +78,11 @@
                            android:layout_height="wrap_content"
                            android:text="@string/Text_btn_login"
                            android:theme="@style/RaisedButtonDark"
-
-
                            />
                        <RelativeLayout
                            android:layout_width="match_parent"
                            android:layout_height="match_parent"
                            android:gravity="center">
-
                            <TextView
                                android:id="@+id/NoTienesCuenta"
                                android:layout_width="wrap_content"
@@ -105,12 +102,9 @@
                                android:textSize="@dimen/textsize_notienecuenta"
                                android:layout_toRightOf="@id/NoTienesCuenta"
                                android:onClick="goCreateCiudadano"/>
-
                        </RelativeLayout>
                    </LinearLayout>
                </ScrollView>
-
-
 
            </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
