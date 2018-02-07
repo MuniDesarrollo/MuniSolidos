@@ -78,7 +78,7 @@
                            android:layout_height="wrap_content"
                            android:text="@string/Text_btn_login"
                            android:theme="@style/RaisedButtonDark"
-                           android:onClick="goreporteCiudadano"
+
 
                            />
                        <RelativeLayout

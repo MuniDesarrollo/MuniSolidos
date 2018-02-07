@@ -44,9 +44,28 @@ public class LoginActivity extends AppCompatActivity  {
            public void onClick(View view) {
                Thread tr= new Thread()
                {
-                  // String res=enviarDatosGET(txtUsuario.getText().toString(), txtCOntraseña.getText().toString());
+                   @Override
+                   public void run() {
+                       final String res=enviarPost(txtUsuario.getText().toString(), txtCOntraseña.getText().toString());
 
+                       runOnUiThread(new Runnable() {
+                           @Override
+                           public void run() {
+                               int r=obtDatosJSON(res);
+                               if (r>0)
+                               {
+                                   Intent intent=new Intent(getApplicationContext(),ReporteSolidosActivity.class);
+                                   startActivity(intent);
+                               }
+                               else
+                               {
+                                   Toast.makeText(getApplicationContext(),"Usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
+                               }
+                           }
+                       });
+                   }
                };
+               tr.start();
            }
        });
     }
@@ -80,16 +99,15 @@ public class LoginActivity extends AppCompatActivity  {
         String respuesta="";
         try
         {
-            URL url=new URL("http://192.168.15.18/AppSolidos/validacionAcceso.php?usuario=carlin&contrasenia=1234");
+            URL url=new URL("http://192.168.15.18:80/AppSolidos/validacionAcceso.php");
             conexion=(HttpURLConnection)url.openConnection();
-            conexion.setRequestMethod("POST");
+            conexion.setRequestMethod("GET");
             conexion.setRequestProperty("Content-Length",""+Integer.toString(parametros.getBytes().length));
 
             conexion.setDoOutput(true);
             DataOutputStream wr=new DataOutputStream(conexion.getOutputStream());
             wr.writeBytes(parametros);
             wr.close();
-
             Scanner inStream=new Scanner(conexion.getErrorStream());
 
             while(inStream.hasNextLine())
