@@ -4,7 +4,7 @@
     <string name="hint_UserName">Nombre de usuario</string>
     <string name="hint_Contraseña">Contraseña</string>
     <string name="Text_btn_login">INICIAR SESION</string>
-    <string name="no_tienes_cuenta">No tines cuenta ?, </string>
+    <string name="no_tienes_cuenta">No tienes cuenta ?, </string>
     <string name="create_cuenta">Crea una aquí</string>
     <string name="hint_dni">DNI</string>
     <string name="hint_nombres">Nombres</string>
