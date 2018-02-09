@@ -64,7 +64,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         });
     }
 
-
+///meto que recibe los datos  a la base de datos ....mediante url(Web Servis)
     private boolean enviarDatos()
     {
         client =new DefaultHttpClient();
@@ -109,7 +109,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(context,"Datos enviados con Exito",Toast.LENGTH_LONG).show();
-                        Dni.setText("");
+                        Limpiar();
 
                     }
                 });
@@ -129,6 +129,16 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         }
     }
 
+    //metodo que limpia los cuadros de texto...................
+    public  void  Limpiar()
+    {
+        Dni.setText("");
+        Nombre.setText("");
+        Apllidos.setText("");
+        Correo.setText("");
+        Usuario.setText("");
+        Contrasenia.setText("");
+    }
 
     public void showToolbar(String titulo, boolean upButton)
     {
