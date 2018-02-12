@@ -37,13 +37,38 @@ import java.util.Scanner;
 
 public class LoginActivity extends AppCompatActivity  {
 
-
+    EditText usu, pas;
+    Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        usu=(EditText)findViewById(R.id.txtusuario);
+        pas=(EditText)findViewById(R.id.txtcontrasenia);
+
+        login=(Button)findViewById(R.id.btnLogin);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (usu.getText().toString().equals("") && pas.getText().toString().equals(""))
+                {
+                    Toast.makeText(getBaseContext(),"Llene los campos",Toast.LENGTH_LONG).show();
+                }else
+                {
+
+                }
+            }
+        });
+
+    }
+
+    //resivir los datos de la ruta desde la base de  datos medienta url en frmato json
+
+    public  void  ResivirDatos()
+    {
 
     }
 
