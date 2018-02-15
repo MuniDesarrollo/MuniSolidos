@@ -50,19 +50,6 @@ public class LoginActivity extends AppCompatActivity  {
 
         login=(Button)findViewById(R.id.btnLogin);
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (usu.getText().toString().equals("") && pas.getText().toString().equals(""))
-                {
-                    Toast.makeText(getBaseContext(),"Llene los campos",Toast.LENGTH_LONG).show();
-                }else
-                {
-
-                }
-            }
-        });
-
     }
 
     //resivir los datos de la ruta desde la base de  datos medienta url en frmato json
@@ -73,18 +60,15 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     //ruta de la vista reporte
-/*
+
     public void goreporteCiudadano(View view)
     {
-        if (txtUsuario.getText().toString().equals("carlin") && txtCOntraseña.getText().toString().equals("123")) {
+
             Intent intn = new Intent(this, ReporteSolidosActivity.class);
             startActivity(intn);
-        }else
-        {
-            Toast.makeText(getApplicationContext(),"usuario o Contraseña incorrecta",Toast.LENGTH_LONG).show();
-        }
+
     }
-*/
+
     //funcion que muestra la vista de registrar Ciudadano---
     public void goCreateCiudadano(View view)
     {
