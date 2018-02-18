@@ -28,7 +28,7 @@
             android:background="@color/backgrountext_card">
 
             <TextView
-                android:id="@+id/txtDescripcion"
+                android:id="@+id/descripcionCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Descripcio"
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/txtEstado"
+                    android:id="@+id/txtestadoCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/estadoCard"
@@ -46,7 +46,7 @@
                     android:textSize="@dimen/estadoCard_textsize"
                     />
                 <TextView
-                    android:id="@+id/txtestadoRespuestaCard"
+                    android:id="@+id/estadoCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txtEstado_respuesta"
@@ -54,7 +54,7 @@
                     android:textSize="@dimen/estadoCard_textsize"
                     android:layout_marginLeft="@dimen/estado_respuesta_card"/>
                 <TextView
-                    android:id="@+id/txtfechaReporte"
+                    android:id="@+id/fechaReporteCardd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txtfecha_reporte"

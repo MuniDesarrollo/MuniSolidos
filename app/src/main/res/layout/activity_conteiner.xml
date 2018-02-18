@@ -5,5 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.carlin.munisolidos.view.conteinerActivity">
+    
+    <FrameLayout
+        android:id="@+id/contenedor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/bottombar_height"
+        >
+
+    </FrameLayout>
+    
 <include layout="@layout/bottonbar"></include>
 </RelativeLayout>
