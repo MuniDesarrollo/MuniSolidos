@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.toolbox.HttpClientStack;
 import com.example.carlin.munisolidos.view.CreateCiudadanoActivity;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
+import com.example.carlin.munisolidos.view.conteinerActivity;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -64,8 +65,8 @@ public class LoginActivity extends AppCompatActivity  {
     public void goreporteCiudadano(View view)
     {
 
-            Intent intn = new Intent(this, ReporteSolidosActivity.class);
-            startActivity(intn);
+        Intent intn = new Intent(this, conteinerActivity.class);
+        startActivity(intn);
 
     }
 

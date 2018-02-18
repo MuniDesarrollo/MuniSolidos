@@ -68,7 +68,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
     private boolean enviarDatos()
     {
         client =new DefaultHttpClient();
-        post=new HttpPost("http://192.168.15.18/AppSolidos/insertarDatos.php");
+        post=new HttpPost("http://192.168.56.1:8081/AppSolidos/insertarDatos.php");
 
         listnvp=new ArrayList<NameValuePair>(6);
 

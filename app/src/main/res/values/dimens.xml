@@ -6,4 +6,10 @@
     <dimen name="padding_horizontal_login">32dp</dimen>
     <dimen name="textsize_notienecuenta">16sp</dimen>
     <dimen name="edittext_margin_createciudadano">10dp</dimen>
+    <dimen name="height_cardview">200dp</dimen>
+    <dimen name="cornerradios_cardview">4dp</dimen>
+    <dimen name="textsize_descripcion">25sp</dimen>
+    <dimen name="estadoCard_textsize">15sp</dimen>
+    <dimen name="estado_respuesta_card">5dp</dimen>
+    <dimen name="bottombar_height">70dp</dimen>
 </resources>
