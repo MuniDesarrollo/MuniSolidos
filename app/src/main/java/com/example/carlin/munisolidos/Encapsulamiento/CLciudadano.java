@@ -15,15 +15,6 @@ public class CLciudadano {
     private String usuario;
     private String contraseña;
 
-    public CLciudadano(String _dni, String _nombre, String _apellido, String _correo, String _usuario, String _contrasenia)
-    {
-        this.setDni(_dni);
-        this.setNombre(_nombre);
-        this.setApellidos(_apellido);
-        this.setCorreo(_correo);
-        this.setUsuario(_usuario);
-        this.setContraseña(_contrasenia);
-    }
 
     public String getDni() {
         return dni;

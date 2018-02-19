@@ -1,0 +1,108 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.example.carlin.munisolidos.view.fragment.CosultarReporteFragment">
+
+
+<!-- TODO: Update blank fragment layout -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/linearLayout"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_above="@+id/imagenId"
+    android:layout_centerHorizontal="true">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="CONSULTAR REPORTES"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/campoEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Documento"
+            android:layout_weight=".5"/>
+
+        <ImageButton
+            android:id="@+id/btnConsultarReporte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_search"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/colorPrimary"
+            android:layout_weight="3"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/txtFechaReportado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:textSize="18sp"/>
+    <TextView
+        android:id="@+id/txtEstado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:textSize="18sp"/>
+
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:id="@+id/linearLayout2">
+
+    <Button
+        android:id="@+id/btnConsultar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Consultar"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_weight="2"
+        android:layout_marginRight="1dp"/>
+
+</LinearLayout>
+
+<ImageView
+    android:id="@+id/imagenId"
+    android:layout_width="250dp"
+    android:layout_height="250dp"
+    android:src="@drawable/abancay"
+    android:layout_above="@+id/linearLayout2"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="12dp" />
+
+</RelativeLayout>

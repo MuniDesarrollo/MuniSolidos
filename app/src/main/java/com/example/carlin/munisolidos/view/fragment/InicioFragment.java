@@ -51,10 +51,11 @@ public class InicioFragment extends Fragment {
     public ArrayList<ReporteReciduo> buidImagenes()
     {
         ArrayList<ReporteReciduo> imagenes=new ArrayList<>();
-        imagenes.add(new ReporteReciduo("2018-02-15",1,"https://www.google.com.pe/search?biw=1536&bih=759&tbm=isch&sa=1&ei=AhuKWqiVJY32zgL40ojgDw&q=imagen+de+residuos+solidos&oq=imagen+de+residuos&gs_l=psy-ab.3.0.0l5j0i30k1l3j0i24k1.11585.16653.0.17715.11.11.0.0.0.0.143.1379.0j10.10.0....0...1c.1.64.psy-ab..1.10.1378...0i67k1j0i8i30k1.0.DVqZtW7CCKI#imgrc=tSjuU8XAx95YZM:","desecho"));
+       /* imagenes.add(new ReporteReciduo("2018-02-15",1,"https://www.google.com.pe/search?biw=1536&bih=759&tbm=isch&sa=1&ei=AhuKWqiVJY32zgL40ojgDw&q=imagen+de+residuos+solidos&oq=imagen+de+residuos&gs_l=psy-ab.3.0.0l5j0i30k1l3j0i24k1.11585.16653.0.17715.11.11.0.0.0.0.143.1379.0j10.10.0....0...1c.1.64.psy-ab..1.10.1378...0i67k1j0i8i30k1.0.DVqZtW7CCKI#imgrc=tSjuU8XAx95YZM:","desecho"));
         imagenes.add(new ReporteReciduo("2018-02-16",1,"https://www.google.com.pe/search?biw=1536&bih=759&tbm=isch&sa=1&ei=AhuKWqiVJY32zgL40ojgDw&q=imagen+de+residuos+solidos&oq=imagen+de+residuos&gs_l=psy-ab.3.0.0l5j0i30k1l3j0i24k1.11585.16653.0.17715.11.11.0.0.0.0.143.1379.0j10.10.0....0...1c.1.64.psy-ab..1.10.1378...0i67k1j0i8i30k1.0.DVqZtW7CCKI#imgrc=tSjuU8XAx95YZM:","desmote"));
         imagenes.add(new ReporteReciduo("2018-02-17",1,"https://www.google.com.pe/search?biw=1536&bih=759&tbm=isch&sa=1&ei=AhuKWqiVJY32zgL40ojgDw&q=imagen+de+residuos+solidos&oq=imagen+de+residuos&gs_l=psy-ab.3.0.0l5j0i30k1l3j0i24k1.11585.16653.0.17715.11.11.0.0.0.0.143.1379.0j10.10.0....0...1c.1.64.psy-ab..1.10.1378...0i67k1j0i8i30k1.0.DVqZtW7CCKI#imgrc=tSjuU8XAx95YZM:","Papel"));
-    return  imagenes;
+    */
+        return  imagenes;
     }
 
     public void showToolbar(String titulo, boolean upButton ,View view)

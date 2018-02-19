@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.carlin.munisolidos.Encapsulamiento.CLciudadano;
 import com.example.carlin.munisolidos.LoginActivity;
 import com.example.carlin.munisolidos.R;
 
@@ -68,8 +69,8 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
     private boolean enviarDatos()
     {
         client =new DefaultHttpClient();
-        post=new HttpPost("http://192.168.56.1:8081/AppSolidos/insertarDatos.php");
-
+        post=new HttpPost("http://192.168.15.18/AppSolidos/insertarDatos.php");
+        //CLciudadano cLciudadano=new CLciudadano();
         listnvp=new ArrayList<NameValuePair>(6);
 
         listnvp.add(new BasicNameValuePair("cdni",Dni.getText().toString().trim()));
@@ -78,7 +79,6 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         listnvp.add(new BasicNameValuePair("ccorreo",Correo.getText().toString().trim()));
         listnvp.add(new BasicNameValuePair("cusuario",Usuario.getText().toString().trim()));
         listnvp.add(new BasicNameValuePair("ccontrasenia",Contrasenia.getText().toString().trim()));
-
 
         try
         {
@@ -110,7 +110,6 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
                     public void run() {
                         Toast.makeText(context,"Datos enviados con Exito",Toast.LENGTH_LONG).show();
                         Limpiar();
-
                     }
                 });
             }
@@ -122,7 +121,6 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
                         Toast.makeText(context,"Datos no enviados",Toast.LENGTH_LONG).show();
                     }
                 });
-
             }
 
             return null;
@@ -140,7 +138,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         Contrasenia.setText("");
     }
 
-    public void showToolbar(String titulo, boolean upButton)
+    public void showToolbar(String titulo, boolean upButton)//muestra el titulo y flecha de regreso............
     {
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -1,5 +1,9 @@
 package com.example.carlin.munisolidos.Encapsulamiento;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import java.util.Date;
 
 /**
@@ -8,32 +12,41 @@ import java.util.Date;
 
 public class ReporteReciduo {
 
-
-    private String fechaReportado;
+    private Date fechaReportado;
     private int estado;
-    private String fechaRecogido;
-    private String imagen;
+    private Date fechaRecogido;
+    private Bitmap imagen;
     private String rutaImagen;
     private double latitud;
     private double longitud;
     private  String descripcion;
     private  int idTciudadano;
     private  int idTcamionRecolector;
+    private  String datos;
 
-    public ReporteReciduo(String fechaReportado, int estado, String imagen,  String descripcion) {
-        this.fechaReportado = fechaReportado;
-        this.estado = estado;
 
-        this.imagen = imagen;
 
-        this.descripcion = descripcion;
-
+    public String getDatos() {
+        return datos;
     }
-    public String getFechaReportado() {
+
+    public void setDatos(String datos) {
+        this.datos = datos;
+        try {
+            byte[] byteCode= Base64.decode(datos,Base64.DEFAULT);
+            this.setImagen(BitmapFactory.decodeByteArray(byteCode,0,byteCode.length));
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public Date getFechaReportado() {
         return fechaReportado;
     }
 
-    public void setFechaReportado(String fechaReportado) {
+    public void setFechaReportado(Date fechaReportado) {
         this.fechaReportado = fechaReportado;
     }
 
@@ -45,19 +58,19 @@ public class ReporteReciduo {
         this.estado = estado;
     }
 
-    public String getFechaRecogido() {
+    public Date getFechaRecogido() {
         return fechaRecogido;
     }
 
-    public void setFechaRecogido(String fechaRecogido) {
+    public void setFechaRecogido(Date fechaRecogido) {
         this.fechaRecogido = fechaRecogido;
     }
 
-    public String getImagen() {
+    public Bitmap getImagen() {
         return imagen;
     }
 
-    public void setImagen(String imagen) {
+    public void setImagen(Bitmap imagen) {
         this.imagen = imagen;
     }
 
@@ -108,6 +121,4 @@ public class ReporteReciduo {
     public void setIdTcamionRecolector(int idTcamionRecolector) {
         this.idTcamionRecolector = idTcamionRecolector;
     }
-
-
 }
