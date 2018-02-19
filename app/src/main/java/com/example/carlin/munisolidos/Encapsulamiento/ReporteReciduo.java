@@ -9,9 +9,9 @@ import java.util.Date;
 public class ReporteReciduo {
 
 
-    private Date fechaReportado;
+    private String fechaReportado;
     private int estado;
-    private Date fechaRecogido;
+    private String fechaRecogido;
     private String imagen;
     private String rutaImagen;
     private double latitud;
@@ -20,23 +20,20 @@ public class ReporteReciduo {
     private  int idTciudadano;
     private  int idTcamionRecolector;
 
-    public ReporteReciduo(Date fechaReportado, int estado, Date fechaRecogido, String imagen, String rutaImagen, double latitud, double longitud, String descripcion, int idTciudadano, int idTcamionRecolector) {
+    public ReporteReciduo(String fechaReportado, int estado, String imagen,  String descripcion) {
         this.fechaReportado = fechaReportado;
         this.estado = estado;
-        this.fechaRecogido = fechaRecogido;
+
         this.imagen = imagen;
-        this.rutaImagen = rutaImagen;
-        this.latitud = latitud;
-        this.longitud = longitud;
+
         this.descripcion = descripcion;
-        this.idTciudadano = idTciudadano;
-        this.idTcamionRecolector = idTcamionRecolector;
+
     }
-    public Date getFechaReportado() {
+    public String getFechaReportado() {
         return fechaReportado;
     }
 
-    public void setFechaReportado(Date fechaReportado) {
+    public void setFechaReportado(String fechaReportado) {
         this.fechaReportado = fechaReportado;
     }
 
@@ -48,11 +45,11 @@ public class ReporteReciduo {
         this.estado = estado;
     }
 
-    public Date getFechaRecogido() {
+    public String getFechaRecogido() {
         return fechaRecogido;
     }
 
-    public void setFechaRecogido(Date fechaRecogido) {
+    public void setFechaRecogido(String fechaRecogido) {
         this.fechaRecogido = fechaRecogido;
     }
 

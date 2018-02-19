@@ -15,8 +15,8 @@
     <string name="toolbar_titulo_reporte">La fuerza del desarrollo</string>
     <string name="Text_btn_ReportarSolidos">REPORTAR</string>
     <string name="Text_btn_tomaFoto">TOMAR FOTO</string>
-    <string name="hint_Tiporesiduo">Tipo de Residuo</string>
-    <string name="text_Tipo_solido">Tipo de Residuo</string>
+    <string name="hint_Tiporesiduo">Descripción de Residuo</string>
+    <string name="text_Tipo_solido">Descripción de Residuo</string>
     <string name="text_btn_UbicacionResiduo">Ubicación de residuo</string>
     <string name="Descripcio">Desechos</string>
     <string name="estadoCard">Estado</string>
