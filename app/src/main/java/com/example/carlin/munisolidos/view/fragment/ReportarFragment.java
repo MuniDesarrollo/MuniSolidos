@@ -1,6 +1,7 @@
 package com.example.carlin.munisolidos.view.fragment;
 
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +36,8 @@ import com.example.carlin.munisolidos.view.conteinerActivity;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +60,10 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     private static  final int COD_FOTO=20;
     //atributos de la tabl tipo residuo....
     EditText Descripcion;
-    TextView FechaReportado;
+    TextView FechaReportado, Fecharecogido=null;
     Button btnubicacion,btnfoto,btnreportar;
 
-    ImageView imgFoto;
+    ImageView imgFoto=null;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
@@ -66,7 +71,6 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     public ReportarFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,23 +93,36 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             }
         });
         return vista;
-
     }
 
     private void cargarWebservice() {
 
-        String url=" ";
-    }
+        progressDialog=new ProgressDialog(getContext());
+        progressDialog.setMessage("En progreso.....");
+        progressDialog.show();
+        String url="http://192.168.15.18/AppSolidos/insertarDetalleReporte.php?fechareportado="+FechaReportado.getText().toString()+"fecharecogido="+FechaReportado+"imagen="+imgFoto+"longitud="+1.02302032+"latitud="+2.2332+"descripcion="+Descripcion.getText().toString()+"idTciudadano="+1;
 
-    @Override
-    public void onErrorResponse(VolleyError error) {
-
+        url=url.replace("","%20");
+        jsonObjectRequest =new JsonObjectRequest(Request.Method.GET,url,null,this,this);
+        request.add(jsonObjectRequest);
     }
 
     @Override
     public void onResponse(JSONObject response) {
 
+        Toast.makeText(getContext(),"Se reporto correctamente",Toast.LENGTH_LONG).show();
+        progressDialog.hide();//oculta el mensaje en progreso
+        Descripcion.setText(" ");
     }
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+        Toast.makeText(getContext(),"No se ha podido registrar correctamente.!"+error.toString(),Toast.LENGTH_LONG).show();
+        progressDialog.hide();//oculta el mensaje en progreso
+        Log.i("ERROR",error.toString());
+    }
+
+
 
     private  void mostrarDialogoOpciones()
     {

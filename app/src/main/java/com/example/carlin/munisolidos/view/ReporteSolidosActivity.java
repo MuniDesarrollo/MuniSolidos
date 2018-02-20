@@ -79,7 +79,6 @@ public class ReporteSolidosActivity extends AppCompatActivity {
 
     //Calendar calendar=new Calendar.getInstace();
 
-
     //metodo para tomar foto por opciones-----------
 
     private  void mostrarDialogoOpciones()
@@ -100,7 +99,6 @@ public class ReporteSolidosActivity extends AppCompatActivity {
         });
     }
 
-
     private void abrirCamara() {
 
         File miFile=new File(Environment.getExternalStorageDirectory(),DIRECTORIO_IMAGEN);
@@ -120,7 +118,6 @@ public class ReporteSolidosActivity extends AppCompatActivity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(filaImagen));
             startActivityForResult(intent,COD_FOTO);
         }
-
 
     }
 
