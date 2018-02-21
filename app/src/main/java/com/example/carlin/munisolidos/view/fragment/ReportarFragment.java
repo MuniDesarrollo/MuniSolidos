@@ -38,6 +38,9 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +63,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     private static  final int COD_FOTO=20;
     //atributos de la tabl tipo residuo....
     EditText Descripcion;
-    TextView FechaReportado, Fecharecogido=null;
+    TextView FechaReportado, Fecharecogido;
     Button btnubicacion,btnfoto,btnreportar;
 
     ImageView imgFoto=null;
@@ -80,6 +83,9 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
         Descripcion=(EditText)vista.findViewById(R.id.txtDescripcionTipo);
         FechaReportado=(TextView)vista.findViewById(R.id.txtFecha);
+        FechaReportado.setText("Fecha de Reporte :"+fechaDelSistema());
+
+        Fecharecogido=null;
         btnfoto=(Button)vista.findViewById(R.id.btnTomarFoto);
         btnubicacion=(Button)vista.findViewById(R.id.btnMiUbicacion);
         btnreportar=(Button)vista.findViewById(R.id.btnReportar);
@@ -89,6 +95,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         btnreportar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 cargarWebservice();
             }
         });
@@ -97,12 +104,13 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     private void cargarWebservice() {
 
+       // Toast.makeText(getContext(),"la fecha es:"+fecha,Toast.LENGTH_LONG).show();
         progressDialog=new ProgressDialog(getContext());
         progressDialog.setMessage("En progreso.....");
         progressDialog.show();
-        String url="http://192.168.15.18/AppSolidos/insertarDetalleReporte.php?fechareportado="+FechaReportado.getText().toString()+"fecharecogido="+FechaReportado+"imagen="+imgFoto+"longitud="+1.02302032+"latitud="+2.2332+"descripcion="+Descripcion.getText().toString()+"idTciudadano="+1;
+        String url="http://192.168.15.18/AppSolidos/insertarDetalleReporte.php?fechareportado="+fechaDelSistemaDB()+"&fecharecogido="+Fecharecogido+"&imagen="+imgFoto+"&longitud="+1.02302032+"&latitud="+2.2332+"&descripcion="+Descripcion.getText().toString()+"&idTciudadano="+1;
 
-        url=url.replace("","%20");
+       // url=url.replace("","%20");//es para remplazar los espacios en blnco.....
         jsonObjectRequest =new JsonObjectRequest(Request.Method.GET,url,null,this,this);
         request.add(jsonObjectRequest);
     }
@@ -122,7 +130,21 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         Log.i("ERROR",error.toString());
     }
 
-
+    //obteniendo la fecha del sistema que sera la fecha de reporte... del residuo----
+    public String fechaDelSistemaDB()
+    {
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyy-MM-dd", Locale.getDefault());
+        Date date=new Date();
+        String fecha=dateFormat.format(date);
+        return fecha.toString();
+    }
+    public String fechaDelSistema()//para mostrar en TextVie del fragnment......
+    {
+        SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Date date=new Date();
+        String fecha=dateFormat.format(date);
+        return fecha.toString();
+    }
 
     private  void mostrarDialogoOpciones()
     {

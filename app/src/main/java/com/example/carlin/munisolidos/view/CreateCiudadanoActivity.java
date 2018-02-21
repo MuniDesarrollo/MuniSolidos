@@ -99,7 +99,6 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
             this.context=context;
         }
 
-
         @Override
         protected String doInBackground(String... strings) {
 
