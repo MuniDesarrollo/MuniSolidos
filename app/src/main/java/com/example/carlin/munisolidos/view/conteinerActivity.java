@@ -43,8 +43,8 @@ public class conteinerActivity extends AppCompatActivity {
                                 .addToBackStack(null).commit();
 
                         break;
-                    case R.id.yo:
-                        break;
+                    /*case R.id.yo:
+                        break;*/
                 }
             }
         });

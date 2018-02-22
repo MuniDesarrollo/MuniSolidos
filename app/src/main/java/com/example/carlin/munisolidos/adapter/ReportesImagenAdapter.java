@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 
 
-public class ImagenAdapterRecyclerView extends RecyclerView.Adapter<ImagenAdapterRecyclerView.ImagenViewHolder>{
+public class ReportesImagenAdapter extends RecyclerView.Adapter<ReportesImagenAdapter.ImagenViewHolder>{
 
     private ArrayList<ReporteReciduo> reporteReciduos;
     private int resource;
@@ -33,7 +33,27 @@ public class ImagenAdapterRecyclerView extends RecyclerView.Adapter<ImagenAdapte
         this.reporteReciduos = reporteReciduos;
     }
 
+    public int getResource() {
+        return resource;
+    }
 
+    public void setResource(int resource) {
+        this.resource = resource;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public ReportesImagenAdapter(ArrayList<ReporteReciduo> reporteReciduos, int resource, Activity activity) {
+        this.reporteReciduos = reporteReciduos;
+        this.resource = resource;
+        this.activity = activity;
+    }
     @Override
     public ImagenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(resource,parent,false);
@@ -57,7 +77,6 @@ public class ImagenAdapterRecyclerView extends RecyclerView.Adapter<ImagenAdapte
 
     public  class  ImagenViewHolder extends RecyclerView.ViewHolder
     {
-
         private ImageView imagenViewCard;
         private TextView descripcionCard;
         private TextView estadoCard;
@@ -70,7 +89,7 @@ public class ImagenAdapterRecyclerView extends RecyclerView.Adapter<ImagenAdapte
             descripcionCard     = (TextView) itemView.findViewById(R.id.descripcionCard);
             estadoCard          = (TextView) itemView.findViewById(R.id.estadoCard);
             fechaReporteCard    = (TextView) itemView.findViewById(R.id.fechaReporteCardd);
-
         }
     }
+
 }

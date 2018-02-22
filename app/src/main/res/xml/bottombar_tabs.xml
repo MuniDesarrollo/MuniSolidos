@@ -12,12 +12,8 @@
         id="@+id/Reportar"
         title="@string/tab_Reportar"
         barColorWhenSelected="@color/colorPrimary"
-        icon="@drawable/ic_icons8_cmara_24">
+        icon="@drawable/ic_icons8_desabrochar_24">
 
     </tab>
-    <tab
-        id="@+id/yo"
-        title="@string/tab_Yo"
-        barColorWhenSelected="@color/colorPrimary">
-    </tab>
+   
 </tabs>

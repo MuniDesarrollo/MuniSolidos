@@ -65,7 +65,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         });
     }
 
-///meto que recibe los datos  a la base de datos ....mediante url(Web Servis)
+///metodo que recibe los datos  a la base de datos ....mediante url(Web Servis)
     private boolean enviarDatos()
     {
         client =new DefaultHttpClient();

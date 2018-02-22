@@ -6,7 +6,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -66,7 +68,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     TextView FechaReportado, Fecharecogido;
     Button btnubicacion,btnfoto,btnreportar;
 
-    ImageView imgFoto=null;
+    ImageView imgFoto;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
@@ -184,6 +186,36 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             startActivityForResult(intent,COD_FOTO);
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode)
+        {
+            case COD_SELECCIONA:
+                Uri miPaht=data.getData();
+                imgFoto.setImageURI(miPaht);
+                break;
+            case COD_FOTO:
+                MediaScannerConnection.scanFile(getContext(),new String[]{path},null, new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String s, Uri uri) {
+                        Log.i("path",""+path);
+                    }
+                });
+                bitmap = BitmapFactory.decodeFile(path);
+                imgFoto.setImageBitmap(bitmap);
+                break;
+        }
+    }
+
+    public  void Limpiar()//limpia las casillas de losTextviex de formulario de FragmentReporte..
+    {
+        FechaReportado.setText("");
+        Fecharecogido.setText("");
+        Descripcion.setText("");
     }
 
 }
