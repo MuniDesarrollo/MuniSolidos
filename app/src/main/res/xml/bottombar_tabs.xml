@@ -15,5 +15,12 @@
         icon="@drawable/ic_icons8_desabrochar_24">
 
     </tab>
+    <tab
+        id="@+id/Buscar"
+        title="@string/tab_Reportar"
+        barColorWhenSelected="@color/colorPrimary"
+        icon="@drawable/ic_icons8_desabrochar_24">
+
+    </tab>
    
 </tabs>

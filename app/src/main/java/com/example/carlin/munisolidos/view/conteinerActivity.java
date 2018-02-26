@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.carlin.munisolidos.R;
+import com.example.carlin.munisolidos.view.fragment.CosultarReporteFragment;
 import com.example.carlin.munisolidos.view.fragment.InicioFragment;
 import com.example.carlin.munisolidos.view.fragment.ReportarFragment;
 import com.roughike.bottombar.BottomBar;
@@ -41,10 +42,14 @@ public class conteinerActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.contenedor,reportarFragment)
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 .addToBackStack(null).commit();
-
                         break;
-                    /*case R.id.yo:
-                        break;*/
+
+                    case R.id.Buscar:
+                            CosultarReporteFragment consultarReporte=new CosultarReporteFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.contenedor,consultarReporte)
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .addToBackStack(null).commit();
+                        break;
                 }
             }
         });
