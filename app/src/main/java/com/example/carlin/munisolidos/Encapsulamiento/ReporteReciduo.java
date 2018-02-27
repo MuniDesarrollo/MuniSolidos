@@ -34,7 +34,7 @@ public class ReporteReciduo {
         this.datos = datos;
         try {
             byte[] byteCode= Base64.decode(datos,Base64.DEFAULT);
-            this.setImagen(BitmapFactory.decodeByteArray(byteCode,0,byteCode.length));
+            this.imagen=BitmapFactory.decodeByteArray(byteCode,0,byteCode.length);
 
         }catch (Exception e)
         {

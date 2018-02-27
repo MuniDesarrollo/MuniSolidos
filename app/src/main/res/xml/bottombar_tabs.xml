@@ -7,7 +7,6 @@
         icon="@drawable/ic_icons8_casa_24">
 
     </tab>
-
     <tab
         id="@+id/Reportar"
         title="@string/tab_Reportar"
@@ -17,7 +16,7 @@
     </tab>
     <tab
         id="@+id/Buscar"
-        title="@string/tab_Reportar"
+        title="@string/tab_Buscar"
         barColorWhenSelected="@color/colorPrimary"
         icon="@drawable/ic_icons8_desabrochar_24">
 

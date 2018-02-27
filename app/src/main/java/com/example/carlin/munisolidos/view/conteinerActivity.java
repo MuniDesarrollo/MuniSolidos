@@ -34,10 +34,9 @@ public class conteinerActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.contenedor,inicioFragment)
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 .addToBackStack(null).commit();
-
                         break;
-                    case R.id.Reportar:
 
+                    case R.id.Reportar:
                         ReportarFragment reportarFragment=new ReportarFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.contenedor,reportarFragment)
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +89,6 @@ public class CosultarReporteFragment extends Fragment implements Response.Listen
 
     }
 
-
     @Override
     public void onResponse(JSONObject response) {
         progressDialog.hide();
@@ -109,17 +109,23 @@ public class CosultarReporteFragment extends Fragment implements Response.Listen
         {
             e.printStackTrace();
         }
-
         //obteniendo los datos para mostrar---
         Descripcion.setText("descripcion"+reporteReciduo.getDescripcion());
         Estado.setText("estado"+reporteReciduo.getEstado());
+
         if (reporteReciduo.getImagen()!=null) {
             campoImagen.setImageBitmap(reporteReciduo.getImagen());
+        }else
+        {
+            campoImagen.setImageResource(R.drawable.abancay);
         }
     }
     @Override
     public void onErrorResponse(VolleyError error) {
 
+        Toast.makeText(getContext(),"No se ha podido registrar correctamente.!"+error.toString(),Toast.LENGTH_LONG).show();
+        progressDialog.hide();//oculta el mensaje en progreso
+        Log.i("ERROR",error.toString());
     }
 
 

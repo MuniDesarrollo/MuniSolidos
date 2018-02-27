@@ -51,12 +51,13 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     //parametros de ......
 
-    private  String mParamt2;
+   // private  String mParamt2;
 
 
-    private  static  final String CARPETA_PRINCIPAL="misImagenesApp/";//directorio principal
-    private  static  final String CARPETA_IMAGEN="miImagen/";//carpeta donde se almacenara las fotos
-    private  static  final String DIRECTORIO_IMAGEN=CARPETA_PRINCIPAL + CARPETA_IMAGEN;//
+    private static final String CARPETA_PRINCIPAL = "misImagenesApp/";//directorio principal
+    private static final String CARPETA_IMAGEN = "imagenes";//carpeta donde se guardan las fotos
+    private static final String DIRECTORIO_IMAGEN = CARPETA_PRINCIPAL + CARPETA_IMAGEN;//ruta carpeta de directorios
+
     private  String path;
     File filaImagen;
     Bitmap bitmap;
@@ -99,6 +100,14 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             public void onClick(View view) {
 
                 cargarWebservice();
+
+            }
+        });
+        btnfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               // Toast.makeText(getContext(),"cargar camara",Toast.LENGTH_SHORT).show();
+                mostrarDialogoOpciones();
             }
         });
         return vista;
@@ -160,22 +169,29 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 {
                     abrirCamara();
                     //llamda para activar la camara
-                    Toast.makeText(getContext(),"cargar camara",Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
+        builder.show();//muestra el mensaje de dialogo.....-.-..-.-..-.-.-.
+
     }
 
-    private void abrirCamara() {
+    private void abrirCamara()
+    {
 
         File miFile=new File(Environment.getExternalStorageDirectory(),DIRECTORIO_IMAGEN);
         boolean isCreada=miFile.exists();
+
         if (isCreada==false)
         {
             isCreada=miFile.mkdirs();
+           // Toast.makeText(getContext(),"Se ha creado el directorio--",Toast.LENGTH_SHORT).show();
         }
+
         if (isCreada==true)
         {
+           // Toast.makeText(getContext(),"Se ha creado el directorio--",Toast.LENGTH_SHORT).show();
             Long consecutivo= System.currentTimeMillis()/1000;
             String nombre=consecutivo.toString()+".jpg";
             path=Environment.getExternalStorageDirectory()+File.separator+DIRECTORIO_IMAGEN+File.separator+nombre;//indicamos la ruta del almacenamiento
@@ -184,7 +200,10 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(filaImagen));
             startActivityForResult(intent,COD_FOTO);
+            //startActivityForResult(intent,COD_FOTO);
         }
+
+
 
     }
 
@@ -201,7 +220,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             case COD_FOTO:
                 MediaScannerConnection.scanFile(getContext(),new String[]{path},null, new MediaScannerConnection.OnScanCompletedListener() {
                     @Override
-                    public void onScanCompleted(String s, Uri uri) {
+                    public void onScanCompleted(String path, Uri uri) {
                         Log.i("path",""+path);
                     }
                 });
@@ -209,6 +228,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 imgFoto.setImageBitmap(bitmap);
                 break;
         }
+       // bitmap=redimensionarImagen(bitmap,600,800);
     }
 
     public  void Limpiar()//limpia las casillas de losTextviex de formulario de FragmentReporte..
