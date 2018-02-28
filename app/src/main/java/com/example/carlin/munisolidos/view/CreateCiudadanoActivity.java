@@ -1,6 +1,7 @@
 package com.example.carlin.munisolidos.view;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
     HttpClient client;
     HttpPost post;
     List<NameValuePair> listnvp;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -108,6 +110,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(context,"Datos enviados con Exito",Toast.LENGTH_LONG).show();
+                        //progressDialog.hide();//oculta el mensaje en progreso
                         Limpiar();
                     }
                 });

@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -44,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -53,13 +56,13 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
    // private  String mParamt2;
 
-
+    private static  final  int CAMERA_REQUEST_CODE=1;
     private static final String CARPETA_PRINCIPAL = "misImagenesApp/";//directorio principal
     private static final String CARPETA_IMAGEN = "imagenes";//carpeta donde se guardan las fotos
     private static final String DIRECTORIO_IMAGEN = CARPETA_PRINCIPAL + CARPETA_IMAGEN;//ruta carpeta de directorios
 
-    private  String path;
-    File filaImagen;
+    private  String path;//para almacenar la ruta de la imagen
+    File filaImagen,fileImagen;
     Bitmap bitmap;
 
     private static final int COD_SELECCIONA=10;
@@ -69,7 +72,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     TextView FechaReportado, Fecharecogido;
     Button btnubicacion,btnfoto,btnreportar;
 
-    ImageView imgFoto;
+    ImageView imgFoto,imgReportes;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
@@ -86,14 +89,20 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
         Descripcion=(EditText)vista.findViewById(R.id.txtDescripcionTipo);
         FechaReportado=(TextView)vista.findViewById(R.id.txtFecha);
-        FechaReportado.setText("Fecha de Reporte :"+fechaDelSistema());
+        FechaReportado.setText("Fecha de Reporte: "+fechaDelSistema());
+        imgReportes=(ImageView)vista.findViewById(R.id.imgReporte);
 
         Fecharecogido=null;
         btnfoto=(Button)vista.findViewById(R.id.btnTomarFoto);
         btnubicacion=(Button)vista.findViewById(R.id.btnMiUbicacion);
         btnreportar=(Button)vista.findViewById(R.id.btnReportar);
 
-
+        imgReportes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCamara();
+            }
+        });
         request= Volley.newRequestQueue(getContext());
         btnreportar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +112,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
             }
         });
+
         btnfoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +121,15 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             }
         });
         return vista;
+    }
+
+    private void openCamara() {
+
+        Intent caraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (caraIntent.resolveActivity(getActivity().getPackageManager())!=null)
+        {
+            startActivityForResult(caraIntent,CAMERA_REQUEST_CODE);
+        }
     }
 
     private void cargarWebservice() {
@@ -169,48 +188,51 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 {
                     abrirCamara();
                     //llamda para activar la camara
-
                 }
             }
         });
         builder.show();//muestra el mensaje de dialogo.....-.-..-.-..-.-.-.
-
     }
 
     private void abrirCamara()
     {
 
+
         File miFile=new File(Environment.getExternalStorageDirectory(),DIRECTORIO_IMAGEN);
         boolean isCreada=miFile.exists();
 
-        if (isCreada==false)
-        {
+        if(isCreada==false){
             isCreada=miFile.mkdirs();
-           // Toast.makeText(getContext(),"Se ha creado el directorio--",Toast.LENGTH_SHORT).show();
         }
 
-        if (isCreada==true)
-        {
-           // Toast.makeText(getContext(),"Se ha creado el directorio--",Toast.LENGTH_SHORT).show();
+        if(isCreada==true){
             Long consecutivo= System.currentTimeMillis()/1000;
             String nombre=consecutivo.toString()+".jpg";
-            path=Environment.getExternalStorageDirectory()+File.separator+DIRECTORIO_IMAGEN+File.separator+nombre;//indicamos la ruta del almacenamiento
-            filaImagen=new File(path);
+
+            path=Environment.getExternalStorageDirectory()+File.separator+DIRECTORIO_IMAGEN
+                    +File.separator+nombre;//indicamos la ruta de almacenamiento
+
+            fileImagen=new File(path);
 
             Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(filaImagen));
-            startActivityForResult(intent,COD_FOTO);
-            //startActivityForResult(intent,COD_FOTO);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(fileImagen));
+
+
+
         }
-
-
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (requestCode==CAMERA_REQUEST_CODE &&resultCode==RESULT_OK)
+        {
+            Bundle extra=data.getExtras();
+            Bitmap bitmap=(Bitmap)extra.get("data");
+            imgReportes.setImageBitmap(bitmap);
+        }
+/*
         switch (requestCode)
         {
             case COD_SELECCIONA:
@@ -227,7 +249,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 bitmap = BitmapFactory.decodeFile(path);
                 imgFoto.setImageBitmap(bitmap);
                 break;
-        }
+        }*/
        // bitmap=redimensionarImagen(bitmap,600,800);
     }
 
