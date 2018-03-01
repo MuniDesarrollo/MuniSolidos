@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
@@ -14,7 +15,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +49,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -60,6 +66,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     private static final String CARPETA_PRINCIPAL = "misImagenesApp/";//directorio principal
     private static final String CARPETA_IMAGEN = "imagenes";//carpeta donde se guardan las fotos
     private static final String DIRECTORIO_IMAGEN = CARPETA_PRINCIPAL + CARPETA_IMAGEN;//ruta carpeta de directorios
+
 
     private  String path;//para almacenar la ruta de la imagen
     File filaImagen,fileImagen;
@@ -97,13 +104,15 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         btnubicacion=(Button)vista.findViewById(R.id.btnMiUbicacion);
         btnreportar=(Button)vista.findViewById(R.id.btnReportar);
 
-        imgReportes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openCamara();
-            }
-        });
+        //Permisos
+        if(solicitaPermisosVersionesSuperiores()){
+            btnfoto.setEnabled(true);
+        }else{
+            btnfoto.setEnabled(false);
+        }
+
         request= Volley.newRequestQueue(getContext());
+
         btnreportar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,14 +132,78 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         return vista;
     }
 
-    private void openCamara() {
+    private boolean solicitaPermisosVersionesSuperiores() {
 
-        Intent caraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (caraIntent.resolveActivity(getActivity().getPackageManager())!=null)
-        {
-            startActivityForResult(caraIntent,CAMERA_REQUEST_CODE);
+        if (Build.VERSION.SDK_INT<Build.VERSION_CODES.M){//validamos si estamos en android menor a 6 para no buscar los permisos
+            return true;
+        }
+
+        //validamos si los permisos ya fueron aceptados
+        if((getContext().checkSelfPermission(WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED)&& getContext().checkSelfPermission(CAMERA)==PackageManager.PERMISSION_GRANTED){
+            return true;
+        }
+
+
+        if ((shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)||(shouldShowRequestPermissionRationale(CAMERA)))){
+            cargarDialogoRecomendacion();
+        }else{
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, 100);
+        }
+
+        return false;//implementamos el que procesa el evento dependiendo de lo que se defina aqui
+    }
+
+    private void cargarDialogoRecomendacion() {
+        AlertDialog.Builder dialogo=new AlertDialog.Builder(getContext());
+        dialogo.setTitle("Permisos Desactivados");
+        dialogo.setMessage("Debe aceptar los permisos para el correcto funcionamiento de la App");
+
+        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
+            }
+        });
+        dialogo.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode==100){
+            if(grantResults.length==2 && grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){//el dos representa los 2 permisos
+                Toast.makeText(getContext(),"Permisos aceptados",Toast.LENGTH_SHORT);
+                btnfoto.setEnabled(true);
+            }
+        }else{
+            solicitarPermisosManual();
         }
     }
+
+    private void solicitarPermisosManual() {
+        final CharSequence[] opciones={"si","no"};
+        final AlertDialog.Builder alertOpciones=new AlertDialog.Builder(getContext());//estamos en fragment
+        alertOpciones.setTitle("¿Desea configurar los permisos de forma manual?");
+        alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (opciones[i].equals("si")){
+                    Intent intent=new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri=Uri.fromParts("package",getContext().getPackageName(),null);
+                    intent.setData(uri);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getContext(),"Los permisos no fueron aceptados",Toast.LENGTH_SHORT).show();
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+        alertOpciones.show();
+    }
+
+
 
     private void cargarWebservice() {
 
@@ -217,8 +290,19 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(fileImagen));
 
+            ////
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N)
+            {
+                String authorities=getContext().getPackageName()+".provider";
+                Uri imageUri= FileProvider.getUriForFile(getContext(),authorities,fileImagen);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            }else
+            {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fileImagen));
+            }
+            startActivityForResult(intent,COD_FOTO);
 
-
+            ////
         }
 
     }
@@ -226,13 +310,13 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==CAMERA_REQUEST_CODE &&resultCode==RESULT_OK)
+        /*if (requestCode==CAMERA_REQUEST_CODE &&resultCode==RESULT_OK)
         {
             Bundle extra=data.getExtras();
             Bitmap bitmap=(Bitmap)extra.get("data");
             imgReportes.setImageBitmap(bitmap);
-        }
-/*
+        }*/
+
         switch (requestCode)
         {
             case COD_SELECCIONA:
@@ -249,7 +333,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 bitmap = BitmapFactory.decodeFile(path);
                 imgFoto.setImageBitmap(bitmap);
                 break;
-        }*/
+        }
        // bitmap=redimensionarImagen(bitmap,600,800);
     }
 
