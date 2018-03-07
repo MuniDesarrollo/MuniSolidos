@@ -203,8 +203,6 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         alertOpciones.show();
     }
 
-
-
     private void cargarWebservice() {
 
        // Toast.makeText(getContext(),"la fecha es:"+fecha,Toast.LENGTH_LONG).show();
@@ -269,17 +267,15 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     private void abrirCamara()
     {
-
-
         File miFile=new File(Environment.getExternalStorageDirectory(),DIRECTORIO_IMAGEN);
-        boolean isCreada=miFile.exists();
+        boolean isCreada=miFile.exists();//verificamos la exixtencia de la CArpeta DIRECTORIO_IMAGEN
 
         if(isCreada==false){
             isCreada=miFile.mkdirs();
         }
 
         if(isCreada==true){
-            Long consecutivo= System.currentTimeMillis()/1000;
+            Long consecutivo= System.currentTimeMillis()/100;
             String nombre=consecutivo.toString()+".jpg";
 
             path=Environment.getExternalStorageDirectory()+File.separator+DIRECTORIO_IMAGEN
@@ -310,31 +306,33 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*if (requestCode==CAMERA_REQUEST_CODE &&resultCode==RESULT_OK)
-        {
-            Bundle extra=data.getExtras();
-            Bitmap bitmap=(Bitmap)extra.get("data");
-            imgReportes.setImageBitmap(bitmap);
-        }*/
 
-        switch (requestCode)
+        if (resultCode==RESULT_OK)
         {
-            case COD_SELECCIONA:
-                Uri miPaht=data.getData();
-                imgFoto.setImageURI(miPaht);
-                break;
-            case COD_FOTO:
-                MediaScannerConnection.scanFile(getContext(),new String[]{path},null, new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-                        Log.i("path",""+path);
-                    }
-                });
-                bitmap = BitmapFactory.decodeFile(path);
-                imgFoto.setImageBitmap(bitmap);
-                break;
+
+            switch (requestCode)
+            {
+                case COD_SELECCIONA:
+                    Uri miPaht=data.getData();
+                    imgFoto.setImageURI(miPaht);
+                    break;
+                case COD_FOTO:
+                    MediaScannerConnection.scanFile(getContext(),new String[]{path},null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.i("path",""+path);
+                        }
+                    });
+                    bitmap = BitmapFactory.decodeFile(path);
+                    imgFoto.setImageBitmap(bitmap);
+                    break;
+            }
+            // bitmap=redimensionarImagen(bitmap,600,800);
+/*
+            Uri path=data.getData();
+            imgFoto.setImageURI(path);*/
         }
-       // bitmap=redimensionarImagen(bitmap,600,800);
+
     }
 
     public  void Limpiar()//limpia las casillas de losTextviex de formulario de FragmentReporte..
