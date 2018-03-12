@@ -1,6 +1,7 @@
 package com.example.carlin.munisolidos.view.fragment;
 
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -17,6 +18,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -39,11 +41,15 @@ import com.android.volley.toolbox.Volley;
 import com.example.carlin.munisolidos.R;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
 import com.example.carlin.munisolidos.view.conteinerActivity;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,7 +64,6 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ReportarFragment extends Fragment implements Response.Listener<JSONObject>,Response.ErrorListener {
 
-    //parametros de ......
 
    // private  String mParamt2;
 
@@ -72,8 +77,23 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     File filaImagen,fileImagen;
     Bitmap bitmap;
 
+    Socket socket;
+   // final static String PARAM_NAME = "name";
+    final static String PARAM_FECHAREPORTE = "freporte";
+    final static String PARAM_ESTADO="estado";
+    final static String PARAM_FECHARECOGIDO = "frecogido";
+    final static String PARAM_FOTO = "foto";
+    final static String RUTA_IMAGEN="rutaImagen";
+    final static String PARAM_LONGITUD = "longitud";
+    final static String PARAM_LATITUD = "latitud";
+    final static String PARAM_DESCRIPCION = "descripcion";
+    final static String ID_CAMION="idCamion";
+    final static String ID_CIUDADANO="idCiudadano";
+
+
     private static final int COD_SELECCIONA=10;
     private static  final int COD_FOTO=20;
+
     //atributos de la tabl tipo residuo....
     EditText Descripcion;
     TextView FechaReportado, Fecharecogido;
@@ -83,10 +103,9 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
+    JSONObject obj = new JSONObject();
     ProgressDialog progressDialog;
-    public ReportarFragment() {
-        // Required empty public constructor
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,6 +123,23 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         btnubicacion=(Button)vista.findViewById(R.id.btnMiUbicacion);
         btnreportar=(Button)vista.findViewById(R.id.btnReportar);
 
+
+        try{
+  /* Instance object socket */
+            socket = IO.socket("http://192.168.15.18:8081");
+
+
+           // obj.put(PARAM_NAME, "Pablo");
+            socket.connect();
+            Toast.makeText(getContext(),"se conecto correctamente",Toast.LENGTH_SHORT).show();
+           // socket.emit("my event", obj);
+
+        }catch (URISyntaxException e) {
+            e.printStackTrace();
+
+        }
+
+
         //Permisos
         if(solicitaPermisosVersionesSuperiores()){
             btnfoto.setEnabled(true);
@@ -117,7 +153,23 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             @Override
             public void onClick(View view) {
 
-                cargarWebservice();
+               // cargarWebservice();
+
+                try {
+                    obj.put(PARAM_FECHAREPORTE,fechaDelSistemaDB());
+                    obj.put(PARAM_ESTADO,1);
+                    obj.put(PARAM_FECHARECOGIDO,null);
+                    obj.put(PARAM_FOTO,imgFoto);
+                    obj.put(RUTA_IMAGEN,null);
+                    obj.put(PARAM_LONGITUD,1.325646);
+                    obj.put(PARAM_LATITUD,0.124545454);
+                    obj.put(PARAM_DESCRIPCION,Descripcion.getText());
+                    obj.put(ID_CAMION,null);
+                    obj.put(ID_CIUDADANO,1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                socket.emit("my event", obj);
 
             }
         });
@@ -129,8 +181,23 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 mostrarDialogoOpciones();
             }
         });
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
+
         return vista;
     }
+
+    private void locationStart() {
+
+
+    }
+
+    ////obtener la ubicacion.... de los reportes
+
 
     private boolean solicitaPermisosVersionesSuperiores() {
 
@@ -309,7 +376,6 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
         if (resultCode==RESULT_OK)
         {
-
             switch (requestCode)
             {
                 case COD_SELECCIONA:

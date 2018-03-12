@@ -14,6 +14,8 @@ import com.android.volley.toolbox.HttpClientStack;
 import com.example.carlin.munisolidos.view.CreateCiudadanoActivity;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
 import com.example.carlin.munisolidos.view.conteinerActivity;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -22,6 +24,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -31,6 +35,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +45,25 @@ public class LoginActivity extends AppCompatActivity  {
 
     EditText usu, pas;
     Button login;
+    Socket socket;
+    //parametros de conexion al web socket....
+    final static String PARAM_NAME = "name";
+    //final static String PARAM_IMAGE = "image";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
+
 
         usu=(EditText)findViewById(R.id.txtusuario);
         pas=(EditText)findViewById(R.id.txtcontrasenia);
 
         login=(Button)findViewById(R.id.btnLogin);
+
 
     }
 
@@ -59,6 +73,7 @@ public class LoginActivity extends AppCompatActivity  {
     {
 
     }
+
 
     //ruta de la vista reporte
 
