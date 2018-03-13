@@ -4,12 +4,19 @@ package com.example.carlin.munisolidos.view.fragment;
 import android.Manifest;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +27,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -38,6 +46,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.carlin.munisolidos.LoginActivity;
 import com.example.carlin.munisolidos.R;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
 import com.example.carlin.munisolidos.view.conteinerActivity;
@@ -48,11 +57,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.Manifest.permission.CAMERA;
@@ -105,7 +116,8 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     JSONObject obj = new JSONObject();
     ProgressDialog progressDialog;
-
+    TextView mensaje1;
+    TextView mensaje2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -123,16 +135,22 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         btnubicacion=(Button)vista.findViewById(R.id.btnMiUbicacion);
         btnreportar=(Button)vista.findViewById(R.id.btnReportar);
 
-
+        mensaje1 = (TextView) vista.findViewById(R.id.mensaje_id);
+        mensaje2 = (TextView) vista.findViewById(R.id.mensaje_id2);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
         try{
-  /* Instance object socket */
+            /* Instance object socket */
             socket = IO.socket("http://192.168.15.18:8081");
 
 
-           // obj.put(PARAM_NAME, "Pablo");
+            // obj.put(PARAM_NAME, "Pablo");
             socket.connect();
             Toast.makeText(getContext(),"se conecto correctamente",Toast.LENGTH_SHORT).show();
-           // socket.emit("my event", obj);
+            // socket.emit("my event", obj);
 
         }catch (URISyntaxException e) {
             e.printStackTrace();
@@ -182,21 +200,95 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             }
         });
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-        } else {
-            locationStart();
-        }
 
         return vista;
     }
 
+
     private void locationStart() {
 
-
+        LocationManager mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Localizacion Local = new Localizacion();
+        Local.setMainActivity((LoginActivity)getContext());
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+        mensaje1.setText("Localización agregada");
+        mensaje2.setText("");
     }
 
-    ////obtener la ubicacion.... de los reportes
+
+
+    public void setLocation(android.location.Location loc) {
+//Obtener la direccion de la calle a partir de la latitud y la longitud
+        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+            try {
+                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(
+                        loc.getLatitude(), loc.getLongitude(), 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+                    mensaje2.setText("Mi direccion es: \n"
+                            + DirCalle.getAddressLine(0));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    /* Aqui empieza la Clase Localizacion */
+    public class Localizacion implements LocationListener {
+        LoginActivity mainActivity;
+        public LoginActivity getMainActivity() {
+            return mainActivity;
+        }
+        public void setMainActivity(LoginActivity mainActivity) {
+            this.mainActivity = mainActivity;
+        }
+        @Override
+        public void onLocationChanged(android.location.Location loc) {
+// Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+// debido a la deteccion de un cambio de ubicacion
+            loc.getLatitude();
+            loc.getLongitude();
+            String Text = "Mi ubicacion actual es: " + "\n Lat = "
+                    + loc.getLatitude() + "\n Long = " + loc.getLongitude();
+            mensaje1.setText(Text);
+            //this.mainActivity.setLocation(loc);
+        }
+        @Override
+        public void onProviderDisabled(String provider) {
+// Este metodo se ejecuta cuando el GPS es desactivado
+            mensaje1.setText("GPS Desactivado");
+        }
+        @Override
+        public void onProviderEnabled(String provider) {
+// Este metodo se ejecuta cuando el GPS es activado
+            mensaje1.setText("GPS Activado");
+        }
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            switch (status) {
+                case LocationProvider.AVAILABLE:
+                    Log.d("debug", "LocationProvider.AVAILABLE");
+                    break;
+                case LocationProvider.OUT_OF_SERVICE:
+                    Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                    break;
+                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                    Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
+                    break;
+            }
+        }
+    }
 
 
     private boolean solicitaPermisosVersionesSuperiores() {
@@ -242,9 +334,11 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             if(grantResults.length==2 && grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){//el dos representa los 2 permisos
                 Toast.makeText(getContext(),"Permisos aceptados",Toast.LENGTH_SHORT);
                 btnfoto.setEnabled(true);
+
             }
         }else{
             solicitarPermisosManual();
+            locationStart();
         }
     }
 
@@ -407,5 +501,6 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         Fecharecogido.setText("");
         Descripcion.setText("");
     }
+
 
 }

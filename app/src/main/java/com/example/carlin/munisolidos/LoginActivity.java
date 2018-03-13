@@ -1,13 +1,26 @@
 package com.example.carlin.munisolidos;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.AsyncTask;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.HttpClientStack;
@@ -39,6 +52,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class LoginActivity extends AppCompatActivity  {
@@ -50,7 +64,8 @@ public class LoginActivity extends AppCompatActivity  {
     final static String PARAM_NAME = "name";
     //final static String PARAM_IMAGE = "image";
 
-
+    TextView mensaje1;
+    TextView mensaje2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +79,8 @@ public class LoginActivity extends AppCompatActivity  {
 
         login=(Button)findViewById(R.id.btnLogin);
 
-
     }
+
 
     //resivir los datos de la ruta desde la base de  datos medienta url en frmato json
 
