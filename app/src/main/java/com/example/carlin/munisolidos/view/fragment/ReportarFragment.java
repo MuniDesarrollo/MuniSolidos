@@ -107,7 +107,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     //atributos de la tabl tipo residuo....
     EditText Descripcion;
-    TextView FechaReportado, Fecharecogido;
+    TextView FechaReportado, Fecharecogido,txtLongitud,txtLatitud,txtdireccion;
     Button btnubicacion,btnfoto,btnreportar;
 
     ImageView imgFoto,imgReportes;
@@ -116,8 +116,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     JSONObject obj = new JSONObject();
     ProgressDialog progressDialog;
-    TextView mensaje1;
-    TextView mensaje2;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,20 +127,22 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         Descripcion=(EditText)vista.findViewById(R.id.txtDescripcionTipo);
         FechaReportado=(TextView)vista.findViewById(R.id.txtFecha);
         FechaReportado.setText("Fecha de Reporte: "+fechaDelSistema());
+        txtLongitud=(TextView)vista.findViewById(R.id.mensaje_id);
+        txtLatitud=(TextView)vista.findViewById(R.id.mensaje_id2);
+       // txtdireccion=(TextView)vista.findViewById(R.id.txtDireccion);
         imgReportes=(ImageView)vista.findViewById(R.id.imgReporte);
 
         Fecharecogido=null;
         btnfoto=(Button)vista.findViewById(R.id.btnTomarFoto);
         btnubicacion=(Button)vista.findViewById(R.id.btnMiUbicacion);
         btnreportar=(Button)vista.findViewById(R.id.btnReportar);
-
-        mensaje1 = (TextView) vista.findViewById(R.id.mensaje_id);
-        mensaje2 = (TextView) vista.findViewById(R.id.mensaje_id2);
+        //mostrando la ubicacion....de los dispositivos---------------------------
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
         } else {
             locationStart();
         }
+        //end ubicacion---------------------------------------------------------
         try{
             /* Instance object socket */
             socket = IO.socket("http://192.168.15.18:8081");
@@ -172,15 +173,15 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             public void onClick(View view) {
 
                // cargarWebservice();
-
+       // Ubicacion ub=new Ubicacion(getActivity());
                 try {
                     obj.put(PARAM_FECHAREPORTE,fechaDelSistemaDB());
                     obj.put(PARAM_ESTADO,1);
                     obj.put(PARAM_FECHARECOGIDO,null);
                     obj.put(PARAM_FOTO,imgFoto);
                     obj.put(RUTA_IMAGEN,null);
-                    obj.put(PARAM_LONGITUD,1.325646);
-                    obj.put(PARAM_LATITUD,0.124545454);
+                    obj.put(PARAM_LATITUD,txtLatitud.getText());
+                    obj.put(PARAM_LONGITUD,txtLongitud.getText());
                     obj.put(PARAM_DESCRIPCION,Descripcion.getText());
                     obj.put(ID_CAMION,null);
                     obj.put(ID_CIUDADANO,1);
@@ -203,13 +204,12 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
         return vista;
     }
-
+        //funciones de la ubicacion... de los dispositivos
 
     private void locationStart() {
-
-        LocationManager mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager mlocManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         Localizacion Local = new Localizacion();
-        Local.setMainActivity((LoginActivity)getContext());
+        Local.setMainActivity(new LoginActivity());
         final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!gpsEnabled) {
             Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -221,13 +221,19 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         }
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
-        mensaje1.setText("Localización agregada");
-        mensaje2.setText("");
+        // mensaje1.setText("Localización agregada");
+        //mensaje2.setText("");
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+                return;
+            }
+        }
     }
 
-
-
-    public void setLocation(android.location.Location loc) {
+    public void setLocation(Location loc) {
 //Obtener la direccion de la calle a partir de la latitud y la longitud
         if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
             try {
@@ -236,8 +242,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                         loc.getLatitude(), loc.getLongitude(), 1);
                 if (!list.isEmpty()) {
                     Address DirCalle = list.get(0);
-                    mensaje2.setText("Mi direccion es: \n"
-                            + DirCalle.getAddressLine(0));
+                    //txtdireccion.setText("AV. " + DirCalle.getAddressLine(0));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -254,26 +259,26 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             this.mainActivity = mainActivity;
         }
         @Override
-        public void onLocationChanged(android.location.Location loc) {
-// Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
-// debido a la deteccion de un cambio de ubicacion
+        public void onLocationChanged(Location loc) {
+            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+            // debido a la deteccion de un cambio de ubicacion
             loc.getLatitude();
             loc.getLongitude();
-            String Text = "Mi ubicacion actual es: " + "\n Lat = "
-                    + loc.getLatitude() + "\n Long = " + loc.getLongitude();
-            mensaje1.setText(Text);
-            //this.mainActivity.setLocation(loc);
+
+            //txtLatitud.setText((int) loc.getLatitude());
+            //txtLongitud.setText((int)loc.getLongitude());
+            String lati="Latitud :"+loc.getLatitude();
+            String longi="Longitud :"+loc.getLongitude();
+
+           // String Text = "Mi ubicacion actual es: " + "\n Lat = "
+                    //+ loc.getLatitude() + "\n Long = " + loc.getLongitude();
+            txtLatitud.setText(lati);
+            txtLongitud.setText(longi);
+
+           // Toast.makeText(getContext(),"Ubicacion :"+Text.toString(),Toast.LENGTH_LONG).show();
+            //  this.mainActivity.setLocation(loc);*/
         }
-        @Override
-        public void onProviderDisabled(String provider) {
-// Este metodo se ejecuta cuando el GPS es desactivado
-            mensaje1.setText("GPS Desactivado");
-        }
-        @Override
-        public void onProviderEnabled(String provider) {
-// Este metodo se ejecuta cuando el GPS es activado
-            mensaje1.setText("GPS Activado");
-        }
+
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
             switch (status) {
@@ -288,8 +293,19 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                     break;
             }
         }
-    }
 
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+
+
+    }
 
     private boolean solicitaPermisosVersionesSuperiores() {
 
@@ -325,7 +341,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         });
         dialogo.show();
     }
-
+/*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -338,9 +354,9 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             }
         }else{
             solicitarPermisosManual();
-            locationStart();
+
         }
-    }
+    }*/
 
     private void solicitarPermisosManual() {
         final CharSequence[] opciones={"si","no"};

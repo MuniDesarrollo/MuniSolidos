@@ -66,37 +66,28 @@
 
                 </android.support.design.widget.TextInputLayout>
                 <TextView
-                    android:id="@+id/mensaje_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-                <TextView
                     android:id="@+id/mensaje_id2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="Latitud"
+                    />
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/mensaje_id"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:gravity="center">
+                    android:layout_height="wrap_content"
+                    android:text="Longitud"
 
-                    <Button
-                        android:id="@+id/btnMiUbicacion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_btn_UbicacionResiduo"
-                        android:theme="@style/RaisedButtonDark" />
-
+                   />
 
                     <Button
                         android:id="@+id/btnTomarFoto"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/btnMiUbicacion"
                         android:text="@string/Text_btn_tomaFoto"
                         android:theme="@style/RaisedButtonDark" />
-                </RelativeLayout>
+
 
                 <Button
                     android:id="@+id/btnReportar"
