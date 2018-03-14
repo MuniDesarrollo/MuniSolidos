@@ -117,7 +117,10 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             @Override
             public void onClick(View view) {
 
-                cargarWebservice();
+                //cargarWebservice();
+                //mostramos la ubicacion
+                Ubicacion ub=new Ubicacion(getActivity());
+
 
             }
         });

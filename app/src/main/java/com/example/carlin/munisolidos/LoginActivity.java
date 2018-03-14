@@ -14,6 +14,7 @@ import com.android.volley.toolbox.HttpClientStack;
 import com.example.carlin.munisolidos.view.CreateCiudadanoActivity;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
 import com.example.carlin.munisolidos.view.conteinerActivity;
+import com.example.carlin.munisolidos.view.fragment.Ubicacion;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity  {
         pas=(EditText)findViewById(R.id.txtcontrasenia);
 
         login=(Button)findViewById(R.id.btnLogin);
+
 
     }
 
