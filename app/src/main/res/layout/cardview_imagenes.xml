@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/imagenCard"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_cardview"
+    cardview:cardCornerRadius="@dimen/cornerradios_cardview">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/imagenViewCard"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_cardview"
+            android:background="@drawable/kali"
+            android:scaleType="centerCrop"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:background="@color/backgrountext_card">
+
+            <TextView
+                android:id="@+id/descripcionCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Descripcio"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textsize_descripcion"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtestadoCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/estadoCard"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/estadoCard_textsize"
+                    />
+                <TextView
+                    android:id="@+id/estadoCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txtEstado_respuesta"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/estadoCard_textsize"
+                    android:layout_marginLeft="@dimen/estado_respuesta_card"/>
+                <TextView
+                    android:id="@+id/fechaReporteCardd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txtfecha_reporte"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/estadoCard_textsize"
+                    android:layout_marginLeft="@dimen/estado_respuesta_card"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        
+    </FrameLayout>
+</android.support.v7.widget.CardView>

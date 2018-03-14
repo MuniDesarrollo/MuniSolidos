@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/inicio"
+        title="@string/tab_inicio"
+        barColorWhenSelected="@color/colorPrimary"
+        icon="@drawable/ic_icons8_casa_24">
+
+    </tab>
+    <tab
+        id="@+id/Reportar"
+        title="@string/tab_Reportar"
+        barColorWhenSelected="@color/colorPrimary"
+        icon="@drawable/ic_icons8_desabrochar_24">
+
+    </tab>
+    <tab
+        id="@+id/Buscar"
+        title="@string/tab_Buscar"
+        barColorWhenSelected="@color/colorPrimary"
+        icon="@drawable/ic_icons8_desabrochar_24">
+
+    </tab>
+   
+</tabs>

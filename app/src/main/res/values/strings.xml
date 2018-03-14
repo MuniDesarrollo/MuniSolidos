@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">MuniSolidos</string>
+    <string name="title_activity_referencias">ReferenciasActivity</string>
+    <string name="hint_UserName">Nombre de usuario</string>
+    <string name="hint_Contraseña">Contraseña</string>
+    <string name="Text_btn_login">INICIAR SESION</string>
+    <string name="no_tienes_cuenta">No tienes cuenta ?, </string>
+    <string name="create_cuenta">Crea una aquí</string>
+    <string name="hint_dni">DNI</string>
+    <string name="hint_nombres">Nombres</string>
+    <string name="hint_apellidos">Apellidos</string>
+    <string name="hint_correo">ejemplo@email.com</string>
+    <string name="Text_btn_crearCiudadano">REGISTRARME</string>
+    <string name="toolbar_titulo_createciudadano">CREAR CUENTA</string>
+    <string name="toolbar_titulo_reporte">La fuerza del desarrollo</string>
+    <string name="Text_btn_ReportarSolidos">REPORTAR</string>
+    <string name="Text_btn_tomaFoto">TOMAR FOTO</string>
+    <string name="hint_Tiporesiduo">Descripción de Residuo</string>
+    <string name="text_Tipo_solido">Descripción de Residuo</string>
+    <string name="text_btn_UbicacionResiduo">Ubicación de residuo</string>
+    <string name="Descripcio">Desechos</string>
+    <string name="estadoCard">Estado</string>
+    <string name="txtEstado_respuesta">Por recoger</string>
+    <string name="txtfecha_reporte">2018-02-15</string>
+    <string name="tab_inicio">INICIO</string>
+    <string name="tab_Reportar">REPORTAR</string>
+    <string name="tab_Buscar">BUSCAR</string>
+    <string name="tab_Yo">YO</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
