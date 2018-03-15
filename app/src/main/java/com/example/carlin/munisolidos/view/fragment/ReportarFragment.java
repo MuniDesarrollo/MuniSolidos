@@ -75,14 +75,12 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ReportarFragment extends Fragment implements Response.Listener<JSONObject>,Response.ErrorListener {
 
-
    // private  String mParamt2;
 
     private static  final  int CAMERA_REQUEST_CODE=1;
     private static final String CARPETA_PRINCIPAL = "misImagenesApp/";//directorio principal
     private static final String CARPETA_IMAGEN = "imagenes";//carpeta donde se guardan las fotos
     private static final String DIRECTORIO_IMAGEN = CARPETA_PRINCIPAL + CARPETA_IMAGEN;//ruta carpeta de directorios
-
 
     private  String path;//para almacenar la ruta de la imagen
     File filaImagen,fileImagen;
@@ -101,14 +99,13 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
     final static String ID_CAMION="idCamion";
     final static String ID_CIUDADANO="idCiudadano";
 
-
     private static final int COD_SELECCIONA=10;
     private static  final int COD_FOTO=20;
 
     //atributos de la tabl tipo residuo....
     EditText Descripcion;
-    TextView FechaReportado, Fecharecogido,txtLongitud,txtLatitud,txtdireccion;
-    Button btnubicacion,btnfoto,btnreportar;
+    TextView FechaReportado, Fecharecogido,txtLongitud,txtLatitud;
+    Button btnfoto,btnreportar;
 
     ImageView imgFoto,imgReportes;
     RequestQueue request;
@@ -116,7 +113,6 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     JSONObject obj = new JSONObject();
     ProgressDialog progressDialog;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,12 +125,10 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         FechaReportado.setText("Fecha de Reporte: "+fechaDelSistema());
         txtLongitud=(TextView)vista.findViewById(R.id.mensaje_id);
         txtLatitud=(TextView)vista.findViewById(R.id.mensaje_id2);
-       // txtdireccion=(TextView)vista.findViewById(R.id.txtDireccion);
         imgReportes=(ImageView)vista.findViewById(R.id.imgReporte);
 
         Fecharecogido=null;
         btnfoto=(Button)vista.findViewById(R.id.btnTomarFoto);
-        btnubicacion=(Button)vista.findViewById(R.id.btnMiUbicacion);
         btnreportar=(Button)vista.findViewById(R.id.btnReportar);
         //mostrando la ubicacion....de los dispositivos---------------------------
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -143,10 +137,25 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             locationStart();
         }
         //end ubicacion---------------------------------------------------------
+        btnfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creamos el Intent para llamar a la Camara
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                //Creamos una carpeta en la memeria del terminal
+                File imagesFolder = new File(Environment.getExternalStorageDirectory(), "AndroidFacil");
+                imagesFolder.mkdirs();
+                //añadimos el nombre de la imagen
+                File image = new File(imagesFolder, "foto.jpg");
+                Uri uriSavedImage = Uri.fromFile(image);
+                //Le decimos al Intent que queremos grabar la imagen
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+                //Lanzamos la aplicacion de la camara con retorno (forResult)
+                startActivityForResult(cameraIntent, 1);
+            }});
         try{
             /* Instance object socket */
             socket = IO.socket("http://192.168.15.18:8081");
-
 
             // obj.put(PARAM_NAME, "Pablo");
             socket.connect();
@@ -155,9 +164,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
         }catch (URISyntaxException e) {
             e.printStackTrace();
-
         }
-
 
         //Permisos
         if(solicitaPermisosVersionesSuperiores()){
@@ -189,21 +196,34 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                     e.printStackTrace();
                 }
                 socket.emit("my event", obj);
-
             }
         });
 
+/*
         btnfoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                // Toast.makeText(getContext(),"cargar camara",Toast.LENGTH_SHORT).show();
-                mostrarDialogoOpciones();
+              //  mostrarDialogoOpciones();
             }
-        });
-
-
+        });*/
         return vista;
     }
+    ///camara-----------------------------------------------------------------------
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Comprovamos que la foto se a realizado
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            //Creamos un bitmap con la imagen recientemente
+            //almacenada en la memoria
+            Bitmap bMap = BitmapFactory.decodeFile(
+                    Environment.getExternalStorageDirectory()+
+                            "/AndroidFacil/"+"foto.jpg");
+            //Añadimos el bitmap al imageView para
+            //mostrarlo por pantalla
+            imgReportes.setImageBitmap(bMap);
+        }
+    }
+    //end camara--------------------------------------------------------------------
         //funciones de la ubicacion... de los dispositivos
 
     private void locationStart() {
@@ -379,7 +399,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         });
         alertOpciones.show();
     }
-
+/*
     private void cargarWebservice() {
 
        // Toast.makeText(getContext(),"la fecha es:"+fecha,Toast.LENGTH_LONG).show();
@@ -392,7 +412,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         jsonObjectRequest =new JsonObjectRequest(Request.Method.GET,url,null,this,this);
         request.add(jsonObjectRequest);
     }
-
+*/
     @Override
     public void onResponse(JSONObject response) {
 
@@ -423,7 +443,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         String fecha=dateFormat.format(date);
         return fecha.toString();
     }
-
+/*
     private  void mostrarDialogoOpciones()
     {
         final CharSequence[] opciones={"Tomar Foto"};
@@ -441,7 +461,8 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         });
         builder.show();//muestra el mensaje de dialogo.....-.-..-.-..-.-.-.
     }
-
+*/
+/*
     private void abrirCamara()
     {
         File miFile=new File(Environment.getExternalStorageDirectory(),DIRECTORIO_IMAGEN);
@@ -479,7 +500,8 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         }
 
     }
-
+*/
+/*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -504,12 +526,12 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                     break;
             }
             // bitmap=redimensionarImagen(bitmap,600,800);
-/*
-            Uri path=data.getData();
-            imgFoto.setImageURI(path);*/
+
+            //Uri path=data.getData();
+            //imgFoto.setImageURI(path);
         }
 
-    }
+    }*/
 
     public  void Limpiar()//limpia las casillas de losTextviex de formulario de FragmentReporte..
     {
