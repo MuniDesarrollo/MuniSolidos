@@ -53,9 +53,11 @@ import com.example.carlin.munisolidos.view.conteinerActivity;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
+import org.java_websocket.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -146,13 +148,14 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 File imagesFolder = new File(Environment.getExternalStorageDirectory(), "AndroidFacil");
                 imagesFolder.mkdirs();
                 //añadimos el nombre de la imagen
-                File image = new File(imagesFolder, "foto.jpg");
+                File image = new File(imagesFolder,"foto.jpg");
                 Uri uriSavedImage = Uri.fromFile(image);
                 //Le decimos al Intent que queremos grabar la imagen
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                 //Lanzamos la aplicacion de la camara con retorno (forResult)
                 startActivityForResult(cameraIntent, 1);
             }});
+
         try{
             /* Instance object socket */
             socket = IO.socket("http://192.168.15.18:8081");
@@ -199,7 +202,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             }
         });
 
-/*
+    /*
         btnfoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,6 +211,18 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
             }
         });*/
         return vista;
+    }
+    //convertir la imagen en bytes---------------------------------------------
+
+    private  String ConvertirImagenStrig(Bitmap bitmap)
+    {
+        ByteArrayOutputStream array=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,array);
+        byte[] imagenByte=array.toByteArray();
+       // String imagenString= Base64.encodeToString(imagenByte,Base64.DEFAULT);
+        String imagen=Base64.encodeBytes(imagenByte);
+       // String mar= com.loopj.android.http.Base64.encodeToString(imagenByte, com.loopj.android.http.Base64.DEFAULT)
+        return imagen;
     }
     ///camara-----------------------------------------------------------------------
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

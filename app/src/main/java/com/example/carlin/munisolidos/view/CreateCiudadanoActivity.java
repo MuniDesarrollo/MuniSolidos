@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.example.carlin.munisolidos.Encapsulamiento.CLciudadano;
 import com.example.carlin.munisolidos.LoginActivity;
 import com.example.carlin.munisolidos.R;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -21,7 +23,10 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +39,14 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
     HttpPost post;
     List<NameValuePair> listnvp;
     ProgressDialog progressDialog;
-
+    Socket socket;
+    JSONObject obj = new JSONObject();
+    final static String PARAM_DNI = "dni";
+    final static String PARAM_NOMBRE = "nombre";
+    final static String PARAM_APELLIDOS = "apellidos";
+    final static String PARAM_CORREO = "correo";
+    final static String PARAM_USUARIO = "usuario";
+    final static String PARAM_CONTRASEÑA = "contrasenia";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +54,9 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_ciudadano);
         showToolbar(getResources().getString(R.string.toolbar_titulo_createciudadano),true);//el true activa la flecha de atras
 
+        CLciudadano cLciudadano=new CLciudadano();
         Dni=(EditText)findViewById(R.id.txtDni);
+        //cLciudadano.setDni(Dni.toString());
         Nombre=(EditText)findViewById(R.id.txtNombre);
         Apllidos=(EditText)findViewById(R.id.txtApellido);
         Correo=(EditText)findViewById(R.id.txtcorreo);
@@ -53,18 +67,37 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         btnCrearCiu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Dni.getText().toString().trim().equals("") )
-                {
-                    Toast.makeText(CreateCiudadanoActivity.this,"Llene los campos",Toast.LENGTH_LONG).show();
-                    Dni.requestFocus();
 
+                    try {
+                        obj.put(PARAM_DNI,Dni.getText());
+                        obj.put(PARAM_NOMBRE,Nombre.getText());
+                        obj.put(PARAM_APELLIDOS,Apllidos.getText());
+                        obj.put(PARAM_CORREO,Correo.getText());
+                        obj.put(PARAM_USUARIO,Usuario.getText());
+                        obj.put(PARAM_CONTRASEÑA,Contrasenia.getText());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    socket.emit("my ciudadano", obj);
+                   // new CreateCiudadanoActivity.EnviarDatos(CreateCiudadanoActivity.this).execute();
                 }
-                else
-                {
-                    new CreateCiudadanoActivity.EnviarDatos(CreateCiudadanoActivity.this).execute();
-                }
-            }
+
         });
+        //conexion a socket io
+
+        try{
+            /* Instance object socket */
+            socket = IO.socket("http://192.168.15.18:8081");
+
+            // obj.put(PARAM_NAME, "Pablo");
+            socket.connect();
+            Toast.makeText(this,"se conecto correctamente",Toast.LENGTH_SHORT).show();
+            // socket.emit("my event", obj);
+
+        }catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        //end conexion
     }
 
 ///metodo que recibe los datos  a la base de datos ....mediante url(Web Servis)
