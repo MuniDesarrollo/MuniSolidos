@@ -48,6 +48,8 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
     final static String PARAM_USUARIO = "usuario";
     final static String PARAM_CONTRASEÑA = "contrasenia";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,19 +71,19 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                     try {
-                        obj.put(PARAM_DNI,Dni.getText());
-                        obj.put(PARAM_NOMBRE,Nombre.getText());
-                        obj.put(PARAM_APELLIDOS,Apllidos.getText());
-                        obj.put(PARAM_CORREO,Correo.getText());
-                        obj.put(PARAM_USUARIO,Usuario.getText());
-                        obj.put(PARAM_CONTRASEÑA,Contrasenia.getText());
+                        obj.put(PARAM_DNI,Dni.getText().toString().trim());
+                        obj.put(PARAM_NOMBRE,Nombre.getText().toString().trim());
+                        obj.put(PARAM_APELLIDOS,Apllidos.getText().toString().trim());
+                        obj.put(PARAM_CORREO,Correo.getText().toString().trim());
+                        obj.put(PARAM_USUARIO,Usuario.getText()).toString().trim();
+                        obj.put(PARAM_CONTRASEÑA,Contrasenia.getText().toString().trim());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     socket.emit("my ciudadano", obj);
+                Toast.makeText(getBaseContext(),"Datos enviados con Exito",Toast.LENGTH_LONG).show();
                    // new CreateCiudadanoActivity.EnviarDatos(CreateCiudadanoActivity.this).execute();
                 }
-
         });
         //conexion a socket io
 
@@ -101,7 +103,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
     }
 
 ///metodo que recibe los datos  a la base de datos ....mediante url(Web Servis)
-    private boolean enviarDatos()
+   /* private boolean enviarDatos()
     {
         client =new DefaultHttpClient();
         post=new HttpPost("http://192.168.15.18/AppSolidos/insertarDatos.php");
@@ -124,7 +126,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
         catch (Exception e)
         {}
         return false;
-    }
+    }*/
 
     class EnviarDatos extends AsyncTask<String,String,String>
     {
@@ -136,7 +138,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-
+            /*
             if (enviarDatos())
             {
                 context.runOnUiThread(new Runnable() {
@@ -156,7 +158,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
                         Toast.makeText(context,"Datos no enviados",Toast.LENGTH_LONG).show();
                     }
                 });
-            }
+            }*/
 
             return null;
         }

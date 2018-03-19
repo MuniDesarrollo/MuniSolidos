@@ -75,7 +75,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReportarFragment extends Fragment implements Response.Listener<JSONObject>,Response.ErrorListener {
+public class ReportarFragment extends Fragment {
 
    // private  String mParamt2;
 
@@ -115,6 +115,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
     JSONObject obj = new JSONObject();
     ProgressDialog progressDialog;
+    String nombreimg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,7 +125,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
         Descripcion=(EditText)vista.findViewById(R.id.txtDescripcionTipo);
         FechaReportado=(TextView)vista.findViewById(R.id.txtFecha);
-        FechaReportado.setText("Fecha de Reporte: "+fechaDelSistema());
+        FechaReportado.setText("Fecha Reporte: "+fechaDelSistema());
         txtLongitud=(TextView)vista.findViewById(R.id.mensaje_id);
         txtLatitud=(TextView)vista.findViewById(R.id.mensaje_id2);
         imgReportes=(ImageView)vista.findViewById(R.id.imgReporte);
@@ -147,32 +148,41 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 //Creamos una carpeta en la memeria del terminal
                 File imagesFolder = new File(Environment.getExternalStorageDirectory(), "AndroidFacil");
                 imagesFolder.mkdirs();
-                //añadimos el nombre de la imagen
-                File image = new File(imagesFolder,"foto.jpg");
-                Uri uriSavedImage = Uri.fromFile(image);
-                //Le decimos al Intent que queremos grabar la imagen
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
-                //Lanzamos la aplicacion de la camara con retorno (forResult)
-                startActivityForResult(cameraIntent, 1);
-            }});
+                if (!imagesFolder.exists())
+                {
+                    imagesFolder.mkdirs();
+                    Toast.makeText(getContext(),"se creo la carpeta.",Toast.LENGTH_LONG).show();
+                }else
+                {
+                    //asignamos nombre a nuestro imagen...........
+                    Long consecutivo= System.currentTimeMillis();
+                    nombreimg=consecutivo.toString()+".jpg";
+                    //añadimos el nombre de la imagen
+                    File image = new File(imagesFolder,nombreimg);
+                    Uri uriSavedImage = Uri.fromFile(image);
+                    //Le decimos al Intent que queremos grabar la imagen
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+                    //Lanzamos la aplicacion de la camara con retorno (forResult)
+                    startActivityForResult(cameraIntent, 1);
+                }
 
+            }});
+       // bitmap=BitmapFactory.decodeResource(getResources(),);
         try{
             /* Instance object socket */
             socket = IO.socket("http://192.168.15.18:8081");
-
-            // obj.put(PARAM_NAME, "Pablo");
             socket.connect();
             Toast.makeText(getContext(),"se conecto correctamente",Toast.LENGTH_SHORT).show();
-            // socket.emit("my event", obj);
 
         }catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
-        //Permisos
-        if(solicitaPermisosVersionesSuperiores()){
+        //Validamos permisos para version de android >= a 6.0
+        if(solicitaPermisosVersionesSuperiores())
+        {
             btnfoto.setEnabled(true);
-        }else{
+        }else
+        {
             btnfoto.setEnabled(false);
         }
 
@@ -181,14 +191,11 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         btnreportar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-               // cargarWebservice();
-       // Ubicacion ub=new Ubicacion(getActivity());
                 try {
                     obj.put(PARAM_FECHAREPORTE,fechaDelSistemaDB());
                     obj.put(PARAM_ESTADO,1);
                     obj.put(PARAM_FECHARECOGIDO,null);
-                    obj.put(PARAM_FOTO,imgFoto);
+                    obj.put(PARAM_FOTO,ConvertirImagenStrig(bitmap));
                     obj.put(RUTA_IMAGEN,null);
                     obj.put(PARAM_LATITUD,txtLatitud.getText());
                     obj.put(PARAM_LONGITUD,txtLongitud.getText());
@@ -198,7 +205,8 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                socket.emit("my event", obj);
+                socket.emit("my event", obj);//enviamos el objeto al servidor node.js
+                Toast.makeText(getContext(),"Se reporto con exito..",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -212,7 +220,6 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         });*/
         return vista;
     }
-    //convertir la imagen en bytes---------------------------------------------
 
     private  String ConvertirImagenStrig(Bitmap bitmap)
     {
@@ -230,13 +237,14 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         if (requestCode == 1 && resultCode == RESULT_OK) {
             //Creamos un bitmap con la imagen recientemente
             //almacenada en la memoria
-            Bitmap bMap = BitmapFactory.decodeFile(
-                    Environment.getExternalStorageDirectory()+
-                            "/AndroidFacil/"+"foto.jpg");
+            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+
+                            "/AndroidFacil/"+nombreimg);
             //Añadimos el bitmap al imageView para
             //mostrarlo por pantalla
-            imgReportes.setImageBitmap(bMap);
+
+            imgReportes.setImageBitmap(bitmap);
         }
+
     }
     //end camara--------------------------------------------------------------------
         //funciones de la ubicacion... de los dispositivos
@@ -268,22 +276,6 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         }
     }
 
-    public void setLocation(Location loc) {
-//Obtener la direccion de la calle a partir de la latitud y la longitud
-        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
-            try {
-                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                List<Address> list = geocoder.getFromLocation(
-                        loc.getLatitude(), loc.getLongitude(), 1);
-                if (!list.isEmpty()) {
-                    Address DirCalle = list.get(0);
-                    //txtdireccion.setText("AV. " + DirCalle.getAddressLine(0));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
     /* Aqui empieza la Clase Localizacion */
     public class Localizacion implements LocationListener {
         LoginActivity mainActivity;
@@ -341,7 +333,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
 
 
     }
-
+//Metodo que que valida los permisos para la version de android de 6.0 a +++
     private boolean solicitaPermisosVersionesSuperiores() {
 
         if (Build.VERSION.SDK_INT<Build.VERSION_CODES.M){//validamos si estamos en android menor a 6 para no buscar los permisos
@@ -349,14 +341,18 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         }
 
         //validamos si los permisos ya fueron aceptados
-        if((getContext().checkSelfPermission(WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED)&& getContext().checkSelfPermission(CAMERA)==PackageManager.PERMISSION_GRANTED){
+        if((getContext().checkSelfPermission(WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED) &&
+                (getContext().checkSelfPermission(CAMERA)==PackageManager.PERMISSION_GRANTED)){
             return true;
         }
 
-
-        if ((shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)||(shouldShowRequestPermissionRationale(CAMERA)))){
+        if ((shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE))||
+                (shouldShowRequestPermissionRationale(CAMERA)))
+        {
             cargarDialogoRecomendacion();
-        }else{
+        }
+        else
+        {
             requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, 100);
         }
 
@@ -428,20 +424,7 @@ public class ReportarFragment extends Fragment implements Response.Listener<JSON
         request.add(jsonObjectRequest);
     }
 */
-    @Override
-    public void onResponse(JSONObject response) {
 
-        Toast.makeText(getContext(),"Se reporto correctamente",Toast.LENGTH_LONG).show();
-        progressDialog.hide();//oculta el mensaje en progreso
-        Descripcion.setText(" ");
-    }
-    @Override
-    public void onErrorResponse(VolleyError error) {
-
-        Toast.makeText(getContext(),"No se ha podido registrar correctamente.!"+error.toString(),Toast.LENGTH_LONG).show();
-        progressDialog.hide();//oculta el mensaje en progreso
-        Log.i("ERROR",error.toString());
-    }
 
     //obteniendo la fecha del sistema que sera la fecha de reporte... del residuo----
     public String fechaDelSistemaDB()
