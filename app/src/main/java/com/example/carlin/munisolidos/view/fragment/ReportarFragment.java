@@ -58,6 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -95,8 +96,8 @@ public class ReportarFragment extends Fragment {
     final static String PARAM_FECHARECOGIDO = "frecogido";
     final static String PARAM_FOTO = "foto";
     final static String RUTA_IMAGEN="rutaImagen";
-    final static String PARAM_LONGITUD = "longitud";
     final static String PARAM_LATITUD = "latitud";
+    final static String PARAM_LONGITUD = "longitud";
     final static String PARAM_DESCRIPCION = "descripcion";
     final static String ID_CAMION="idCamion";
     final static String ID_CIUDADANO="idCiudadano";
@@ -169,8 +170,8 @@ public class ReportarFragment extends Fragment {
             }});
        // bitmap=BitmapFactory.decodeResource(getResources(),);
         try{
-            /* Instance object socket */
-            socket = IO.socket("http://192.168.15.18:8081");
+            /* Instance object http://192.168.1.49:7000 */
+            socket = IO.socket("http://200.121.73.169:7000");
             socket.connect();
             Toast.makeText(getContext(),"se conecto correctamente",Toast.LENGTH_SHORT).show();
 
@@ -186,7 +187,7 @@ public class ReportarFragment extends Fragment {
             btnfoto.setEnabled(false);
         }
 
-        request= Volley.newRequestQueue(getContext());
+        //request= Volley.newRequestQueue(getContext());
 
         btnreportar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +197,7 @@ public class ReportarFragment extends Fragment {
                     obj.put(PARAM_ESTADO,1);
                     obj.put(PARAM_FECHARECOGIDO,null);
                     obj.put(PARAM_FOTO,ConvertirImagenStrig(bitmap));
-                    obj.put(RUTA_IMAGEN,null);
+                   // obj.put(RUTA_IMAGEN,null);
                     obj.put(PARAM_LATITUD,txtLatitud.getText());
                     obj.put(PARAM_LONGITUD,txtLongitud.getText());
                     obj.put(PARAM_DESCRIPCION,Descripcion.getText());
@@ -206,6 +207,7 @@ public class ReportarFragment extends Fragment {
                     e.printStackTrace();
                 }
                 socket.emit("my event", obj);//enviamos el objeto al servidor node.js
+                //Log.i("no se conecto","");
                 Toast.makeText(getContext(),"Se reporto con exito..",Toast.LENGTH_LONG).show();
             }
         });
