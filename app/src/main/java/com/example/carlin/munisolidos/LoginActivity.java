@@ -27,6 +27,7 @@ import com.android.volley.toolbox.HttpClientStack;
 import com.example.carlin.munisolidos.view.CreateCiudadanoActivity;
 import com.example.carlin.munisolidos.view.ReporteSolidosActivity;
 import com.example.carlin.munisolidos.view.conteinerActivity;
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
@@ -59,35 +60,64 @@ public class LoginActivity extends AppCompatActivity  {
 
     EditText usu, pas;
     Button login;
-    Socket socket;
     //parametros de conexion al web socket....
     final static String PARAM_NAME = "name";
     //final static String PARAM_IMAGE = "image";
-
+    Socket socket;
+    JSONObject obj = new JSONObject();
+    final static String PARAM_USUARIO = "usuario";
+    final static  String PARAM_CONTRASENIA="contrasenia";
     TextView mensaje1;
     TextView mensaje2;
-
+    String validar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
 
-
         usu=(EditText)findViewById(R.id.txtusuario);
         pas=(EditText)findViewById(R.id.txtcontrasenia);
 
         login=(Button)findViewById(R.id.btnLogin);
+       // socket.on("respuesta",datos);
+        //socket.connect();
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    obj.put(PARAM_USUARIO,usu.getText().toString().trim());
+                    obj.put(PARAM_CONTRASENIA,pas.getText().toString().trim());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                socket.emit("validar", obj);
+               Toast.makeText(getBaseContext(),"Datos enviados con Exito",Toast.LENGTH_LONG).show();
+                //Conectar();
+
+            }
+        });
+
+
+        //conexion a socket io
+
+        try{
+            /* Instance object socket */
+            socket = IO.socket("http://192.168.15.202:7000");
+
+            // obj.put(PARAM_NAME, "Pablo");
+            socket.connect();
+            Toast.makeText(this,"se conecto correctamente",Toast.LENGTH_SHORT).show();
+            // socket.emit("my event", obj);
+
+        }catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
     }
 
 
-    //resivir los datos de la ruta desde la base de  datos medienta url en frmato json
-
-    public  void  ResivirDatos()
-    {
-
-    }
 
 
     //ruta de la vista reporte
