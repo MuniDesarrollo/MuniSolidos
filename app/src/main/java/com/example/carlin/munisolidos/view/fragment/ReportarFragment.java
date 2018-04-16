@@ -170,8 +170,8 @@ public class ReportarFragment extends Fragment {
             }});
        // bitmap=BitmapFactory.decodeResource(getResources(),);
         try{
-            /* Instance object http://192.168.1.49:7000 */
-            socket = IO.socket("http://200.121.73.169:7000");
+            /* Instance object http://192.168.1.49:7000---200.121.73.169 */
+            socket = IO.socket("http://192.168.15.202:7000");
             socket.connect();
             Toast.makeText(getContext(),"se conecto correctamente",Toast.LENGTH_SHORT).show();
 
