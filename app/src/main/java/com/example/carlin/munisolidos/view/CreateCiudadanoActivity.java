@@ -89,7 +89,7 @@ public class CreateCiudadanoActivity extends AppCompatActivity {
 
         try{
             /* Instance object socket */
-            socket = IO.socket("http://192.168.15.202:7000");
+            socket = IO.socket("http://192.168.56.1:7000");
 
             // obj.put(PARAM_NAME, "Pablo");
             socket.connect();

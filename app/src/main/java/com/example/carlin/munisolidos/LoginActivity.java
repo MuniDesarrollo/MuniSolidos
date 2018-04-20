@@ -40,6 +40,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -104,13 +105,13 @@ public class LoginActivity extends AppCompatActivity  {
 
         try{
             /* Instance object socket */
-            socket = IO.socket("http://192.168.15.202:7000");
+            socket = IO.socket("http://192.168.1.35:7000");
 
             // obj.put(PARAM_NAME, "Pablo");
             socket.connect();
             Toast.makeText(this,"se conecto correctamente",Toast.LENGTH_SHORT).show();
             // socket.emit("my event", obj);
-
+            //Toast.makeText(this,"usuario o contraseña invalida",Toast.LENGTH_LONG).show();
         }catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -118,8 +119,26 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
-
-
+//escuchamos al servidor con los datos en formato json
+/*
+    private Emitter.Listener datos=new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            JSONObject data = (JSONObject) args[0];
+            Toast.makeText(LoginActivity.this,"datos :"+data,Toast.LENGTH_SHORT).show();
+            if (data.equals("1"))
+            {
+               // Intent intn = new Intent(LoginActivity.this, conteinerActivity.class);
+                //startActivity(intn);
+            }
+            else
+            {
+                Toast.makeText(LoginActivity.this,"usuario o contraseña invalida",Toast.LENGTH_LONG).show();
+            }
+            finish();
+        }
+    };
+*/
     //ruta de la vista reporte
 
     public void goreporteCiudadano(View view)
