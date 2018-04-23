@@ -43,12 +43,6 @@ public class conteinerActivity extends AppCompatActivity {
                                 .addToBackStack(null).commit();
                         break;
 
-                    case R.id.Buscar:
-                            CosultarReporteFragment consultarReporte=new CosultarReporteFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.contenedor,consultarReporte)
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .addToBackStack(null).commit();
-                        break;
                 }
             }
         });

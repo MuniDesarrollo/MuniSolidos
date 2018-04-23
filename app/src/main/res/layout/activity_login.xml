@@ -52,7 +52,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_UserName"
-                        android:theme="@style/EditTextWhite">
+                        android:theme="@style/EditTextWhite"
+                        android:inputType="number"
+                        android:maxLength="8">
 
                     </android.support.design.widget.TextInputEditText>
 
@@ -69,7 +71,9 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_Contraseña"
                         android:inputType="textPassword"
-                        android:theme="@style/EditTextWhite">
+                        android:theme="@style/EditTextWhite"
+                        android:maxLength="8"
+                        >
 
                     </android.support.design.widget.TextInputEditText>
 

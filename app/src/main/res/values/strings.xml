@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">MuniSolidos</string>
     <string name="title_activity_referencias">ReferenciasActivity</string>
-    <string name="hint_UserName">Nombre de usuario</string>
-    <string name="hint_Contraseña">Contraseña</string>
+    <string name="hint_UserName">Nombre de usuario(DNI)</string>
+    <string name="hint_Contraseña">Contraseña(DNI)</string>
     <string name="Text_btn_login">INICIAR SESION</string>
     <string name="no_tienes_cuenta">No tienes cuenta ?, </string>
     <string name="create_cuenta">Crea una aquí</string>

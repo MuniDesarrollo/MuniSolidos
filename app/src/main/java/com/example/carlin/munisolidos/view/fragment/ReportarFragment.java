@@ -30,6 +30,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -201,7 +202,7 @@ public class ReportarFragment extends Fragment {
                     obj.put(PARAM_LATITUD,txtLatitud.getText());
                     obj.put(PARAM_LONGITUD,txtLongitud.getText());
                     obj.put(PARAM_DESCRIPCION,Descripcion.getText());
-                    obj.put(ID_CAMION,null);
+                    obj.put(ID_CAMION,1);
                     obj.put(ID_CIUDADANO,1);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -443,6 +444,14 @@ public class ReportarFragment extends Fragment {
         String fecha=dateFormat.format(date);
         return fecha.toString();
     }
+    //obtenemos el numero de telefono del ciudadano por cuestiones de seguridad
+
+    private String GetNumeroTelefono()
+    {
+        TelephonyManager telephonyManager=(TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+      return telephonyManager.getLine1Number();
+    }
 /*
     private  void mostrarDialogoOpciones()
     {
@@ -501,43 +510,14 @@ public class ReportarFragment extends Fragment {
 
     }
 */
-/*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode==RESULT_OK)
-        {
-            switch (requestCode)
-            {
-                case COD_SELECCIONA:
-                    Uri miPaht=data.getData();
-                    imgFoto.setImageURI(miPaht);
-                    break;
-                case COD_FOTO:
-                    MediaScannerConnection.scanFile(getContext(),new String[]{path},null, new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                            Log.i("path",""+path);
-                        }
-                    });
-                    bitmap = BitmapFactory.decodeFile(path);
-                    imgFoto.setImageBitmap(bitmap);
-                    break;
-            }
-            // bitmap=redimensionarImagen(bitmap,600,800);
-
-            //Uri path=data.getData();
-            //imgFoto.setImageURI(path);
-        }
-
-    }*/
 
     public  void Limpiar()//limpia las casillas de losTextviex de formulario de FragmentReporte..
     {
-        FechaReportado.setText("");
+
         Fecharecogido.setText("");
         Descripcion.setText("");
+        //imgFoto.setImageDrawable();
     }
 
 

@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity  {
     JSONObject obj = new JSONObject();
     final static String PARAM_USUARIO = "usuario";
     final static  String PARAM_CONTRASENIA="contrasenia";
+
     TextView mensaje1;
     TextView mensaje2;
     String validar;
@@ -81,8 +82,16 @@ public class LoginActivity extends AppCompatActivity  {
         pas=(EditText)findViewById(R.id.txtcontrasenia);
 
         login=(Button)findViewById(R.id.btnLogin);
-       // socket.on("respuesta",datos);
-        //socket.connect();
+        //conexion a socket io
+        try{
+            /* Instance object socket */
+            socket = IO.socket("http://192.168.15.202:7000");
+            //socket.connect();
+            Toast.makeText(this,"se conecto correctamente",Toast.LENGTH_SHORT).show();;
+        }catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,52 +102,67 @@ public class LoginActivity extends AppCompatActivity  {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                socket.emit("validar", obj);
-               Toast.makeText(getBaseContext(),"Datos enviados con Exito",Toast.LENGTH_LONG).show();
-                //Conectar();
+                socket.emit("validar", obj);///enviamos los datos obtenidos desde los edidtext usuario y contraseña
+                socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {//obtenemos la respuesta del servidor node js
+
+                    @Override
+                    public void call(Object... args) {
+                        Log.d("ActivityName: ", "socket connected");
+
+                        // emite  aqui todo lo quieras al servidor node js
+                        //socket.emit("login", some);
+                        //socket.disconnect();
+                    }
+
+                    // this is the emit from the server
+                }).on("respuesta", new Emitter.Listener() {
+
+                    @Override
+                    public void call(Object... args) {
+                        // this argas[0] obtenemos todo lo que manda desde el servidor node js
+
+                        final JSONArray obj1 = (JSONArray) args[0];
+
+                        final String message = obj1.toString();
+
+
+                       // final String nom=obj.toString(getString("usuario"));
+                        // runOnUiThread is needed if you want to change something in the UI thread
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                // do something
+                                //mListData is the array adapter
+                                //enviamos a una nueva ventana
+
+                                if (message!=null) {
+                                    Intent intn = new Intent(LoginActivity.this, conteinerActivity.class);
+                                    startActivity(intn);
+                                    Toast.makeText(getBaseContext(), "Datos enviados con Exito" + message, Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    Toast.makeText(getBaseContext(), "Usuario o Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+                    @Override
+                    public void call(Object... args) {
+                        Log.d("ActivityName: ", "socket disconnected");
+                    }
+                });
+                socket.connect();//hacemos la conexion al servidor node js-
 
             }
         });
 
 
-        //conexion a socket io
-
-        try{
-            /* Instance object socket */
-            socket = IO.socket("http://192.168.1.35:7000");
-
-            // obj.put(PARAM_NAME, "Pablo");
-            socket.connect();
-            Toast.makeText(this,"se conecto correctamente",Toast.LENGTH_SHORT).show();
-            // socket.emit("my event", obj);
-            //Toast.makeText(this,"usuario o contraseña invalida",Toast.LENGTH_LONG).show();
-        }catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
 
     }
 
 
-//escuchamos al servidor con los datos en formato json
-/*
-    private Emitter.Listener datos=new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            JSONObject data = (JSONObject) args[0];
-            Toast.makeText(LoginActivity.this,"datos :"+data,Toast.LENGTH_SHORT).show();
-            if (data.equals("1"))
-            {
-               // Intent intn = new Intent(LoginActivity.this, conteinerActivity.class);
-                //startActivity(intn);
-            }
-            else
-            {
-                Toast.makeText(LoginActivity.this,"usuario o contraseña invalida",Toast.LENGTH_LONG).show();
-            }
-            finish();
-        }
-    };
-*/
     //ruta de la vista reporte
 
     public void goreporteCiudadano(View view)
