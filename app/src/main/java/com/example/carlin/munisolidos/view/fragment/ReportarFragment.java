@@ -119,6 +119,7 @@ public class ReportarFragment extends Fragment {
     ProgressDialog progressDialog;
     String nombreimg;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -131,6 +132,11 @@ public class ReportarFragment extends Fragment {
         txtLongitud=(TextView)vista.findViewById(R.id.mensaje_id);
         txtLatitud=(TextView)vista.findViewById(R.id.mensaje_id2);
         imgReportes=(ImageView)vista.findViewById(R.id.imgReporte);
+
+        //recuperamos el id del ciudadano que se esta mandando desde loginActivity
+        //int recuperaID=getActivity().getIntent().getIntExtra("idCiudadano",0);
+        Bundle datoId=getActivity().getIntent().getExtras();
+        final int idCiudadano=datoId.getInt("idCiudadano");
 
         Fecharecogido=null;
         btnfoto=(Button)vista.findViewById(R.id.btnTomarFoto);
@@ -175,6 +181,7 @@ public class ReportarFragment extends Fragment {
             socket = IO.socket("http://192.168.15.202:7000");
             socket.connect();
             Toast.makeText(getContext(),"se conecto correctamente",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),"id"+recuperaID,Toast.LENGTH_SHORT).show();
 
         }catch (URISyntaxException e) {
             e.printStackTrace();
@@ -203,7 +210,7 @@ public class ReportarFragment extends Fragment {
                     obj.put(PARAM_LONGITUD,txtLongitud.getText());
                     obj.put(PARAM_DESCRIPCION,Descripcion.getText());
                     obj.put(ID_CAMION,1);
-                    obj.put(ID_CIUDADANO,1);
+                    obj.put(ID_CIUDADANO,idCiudadano);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

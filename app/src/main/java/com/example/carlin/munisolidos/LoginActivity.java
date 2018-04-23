@@ -121,14 +121,29 @@ public class LoginActivity extends AppCompatActivity  {
                     public void call(Object... args) {
                         // this argas[0] obtenemos todo lo que manda desde el servidor node js
 
-                        final JSONArray obj1 = (JSONArray) args[0];
+                        final JSONArray json = (JSONArray) args[0];
 
-                        final String message = obj1.toString();
+                        JSONObject object = null;
+                        try {
+                            object = json.getJSONObject(0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-
-                       // final String nom=obj.toString(getString("usuario"));
-                        // runOnUiThread is needed if you want to change something in the UI thread
-
+                        String user = null;
+                        String pass=null;
+                        int id=0;
+                        try {
+                            user = object.getString("usuario");
+                            pass=object.getString("contrasenia");
+                            id=object.getInt("idTciudadano");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        final String message = json.toString();
+                        final String finaluser = user;
+                        final String finalpass=pass;
+                        final int finalid=id;
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 // do something
@@ -137,8 +152,9 @@ public class LoginActivity extends AppCompatActivity  {
 
                                 if (message!=null) {
                                     Intent intn = new Intent(LoginActivity.this, conteinerActivity.class);
+                                    intn.putExtra("idCiudadano",finalid);//mandamos el id al ReportarFragment
                                     startActivity(intn);
-                                    Toast.makeText(getBaseContext(), "Datos enviados con Exito" + message, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getBaseContext(), "usuario" + finalid, Toast.LENGTH_LONG).show();
                                 }
                                 else {
                                     Toast.makeText(getBaseContext(), "Usuario o Contraseña incorrecta", Toast.LENGTH_LONG).show();
@@ -154,24 +170,12 @@ public class LoginActivity extends AppCompatActivity  {
                     }
                 });
                 socket.connect();//hacemos la conexion al servidor node js-
-
             }
         });
-
-
-
     }
 
+    //funcion que manda el id del ciudadano
 
-    //ruta de la vista reporte
-
-    public void goreporteCiudadano(View view)
-    {
-
-        Intent intn = new Intent(this, conteinerActivity.class);
-        startActivity(intn);
-
-    }
 
     //funcion que muestra la vista de registrar Ciudadano---
     public void goCreateCiudadano(View view)
@@ -179,6 +183,5 @@ public class LoginActivity extends AppCompatActivity  {
         Intent intent = new Intent(this, CreateCiudadanoActivity.class);//de donde this a donde quiero ir CreateCiudadanoActivity.class
         startActivity(intent);
     }
-
 
 }
