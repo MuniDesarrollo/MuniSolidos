@@ -120,45 +120,53 @@ public class LoginActivity extends AppCompatActivity  {
                     @Override
                     public void call(Object... args) {
                         // this argas[0] obtenemos todo lo que manda desde el servidor node js
-
-                        final JSONArray json = (JSONArray) args[0];
-
-                        JSONObject object = null;
-                        try {
-                            object = json.getJSONObject(0);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        String user = null;
-                        String pass=null;
                         int id=0;
-                        try {
-                            user = object.getString("usuario");
-                            pass=object.getString("contrasenia");
-                            id=object.getInt("idTciudadano");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        final JSONArray json = (JSONArray) args[0];
                         final String message = json.toString();
-                        final String finaluser = user;
-                        final String finalpass=pass;
-                        final int finalid=id;
+
+
+                            JSONObject object = null;
+                            try {
+                                object = json.getJSONObject(0);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            String user = null;
+                            String pass = null;
+
+                            try {
+                                user = object.getString("usuario");
+                                pass = object.getString("contrasenia");
+                                id = object.getInt("idTciudadano");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            final String finaluser = user;
+                            final String finalpass = pass;
+
+                            final int finalid = id;
+
+                        final JSONObject finalObject = object;
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 // do something
                                 //mListData is the array adapter
                                 //enviamos a una nueva ventana
+                              Toast.makeText(getBaseContext(),"dato"+ finalObject,Toast.LENGTH_LONG).show();
+                                /*
+                                if (finalObject.length()>0) {
 
-                                if (message!=null) {
                                     Intent intn = new Intent(LoginActivity.this, conteinerActivity.class);
                                     intn.putExtra("idCiudadano",finalid);//mandamos el id al ReportarFragment
                                     startActivity(intn);
-                                    Toast.makeText(getBaseContext(), "usuario" + finalid, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getBaseContext(), "usuario" + message+finalid, Toast.LENGTH_LONG).show();
                                 }
                                 else {
+
                                     Toast.makeText(getBaseContext(), "Usuario o Contraseña incorrecta", Toast.LENGTH_LONG).show();
-                                }
+                                    }*/
                             }
                         });
                     }

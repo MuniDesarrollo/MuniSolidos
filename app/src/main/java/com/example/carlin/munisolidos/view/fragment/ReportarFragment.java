@@ -154,12 +154,12 @@ public class ReportarFragment extends Fragment {
                 //Creamos el Intent para llamar a la Camara
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 //Creamos una carpeta en la memeria del terminal
-                File imagesFolder = new File(Environment.getExternalStorageDirectory(), "AndroidFacil");
+                File imagesFolder = new File(Environment.getExternalStorageDirectory(), "ImagenAppSolidos");
                 imagesFolder.mkdirs();
                 if (!imagesFolder.exists())
                 {
                     imagesFolder.mkdirs();
-                    Toast.makeText(getContext(),"se creo la carpeta.",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(),"se creo la carpeta.",Toast.LENGTH_LONG).show();
                 }else
                 {
                     //asignamos nombre a nuestro imagen...........
@@ -214,12 +214,15 @@ public class ReportarFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                socket.emit("my event", obj);//enviamos el objeto al servidor node.js
+                    socket.emit("my event", obj);//enviamos el objeto al servidor node.js
+                    Toast.makeText(getContext(),"Se reporto con exito..",Toast.LENGTH_LONG).show();
+                    Descripcion.setText("");
+
                 //Log.i("no se conecto","");
-                Toast.makeText(getContext(),"Se reporto con exito..",Toast.LENGTH_LONG).show();
+
             }
         });
-
+       // Limpiar();
     /*
         btnfoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,7 +251,7 @@ public class ReportarFragment extends Fragment {
             //Creamos un bitmap con la imagen recientemente
             //almacenada en la memoria
             bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+
-                            "/AndroidFacil/"+nombreimg);
+                            "/ImagenAppSolidos/"+nombreimg);
             //Añadimos el bitmap al imageView para
             //mostrarlo por pantalla
 
@@ -302,8 +305,6 @@ public class ReportarFragment extends Fragment {
             loc.getLatitude();
             loc.getLongitude();
 
-            //txtLatitud.setText((int) loc.getLatitude());
-            //txtLongitud.setText((int)loc.getLongitude());
             String lati="Latitud :"+loc.getLatitude();
             String longi="Longitud :"+loc.getLongitude();
 
@@ -382,22 +383,6 @@ public class ReportarFragment extends Fragment {
         });
         dialogo.show();
     }
-/*
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode==100){
-            if(grantResults.length==2 && grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){//el dos representa los 2 permisos
-                Toast.makeText(getContext(),"Permisos aceptados",Toast.LENGTH_SHORT);
-                btnfoto.setEnabled(true);
-
-            }
-        }else{
-            solicitarPermisosManual();
-
-        }
-    }*/
 
     private void solicitarPermisosManual() {
         final CharSequence[] opciones={"si","no"};
@@ -420,20 +405,6 @@ public class ReportarFragment extends Fragment {
         });
         alertOpciones.show();
     }
-/*
-    private void cargarWebservice() {
-
-       // Toast.makeText(getContext(),"la fecha es:"+fecha,Toast.LENGTH_LONG).show();
-        progressDialog=new ProgressDialog(getContext());
-        progressDialog.setMessage("En progreso.....");
-        progressDialog.show();
-        String url="http://192.168.15.18/AppSolidos/insertarDetalleReporte.php?fechareportado="+fechaDelSistemaDB()+"&fecharecogido="+Fecharecogido+"&imagen="+imgFoto+"&longitud="+1.02302032+"&latitud="+2.2332+"&descripcion="+Descripcion.getText().toString()+"&idTciudadano="+1;
-
-       // url=url.replace("","%20");//es para remplazar los espacios en blnco.....
-        jsonObjectRequest =new JsonObjectRequest(Request.Method.GET,url,null,this,this);
-        request.add(jsonObjectRequest);
-    }
-*/
 
 
     //obteniendo la fecha del sistema que sera la fecha de reporte... del residuo----
@@ -459,72 +430,12 @@ public class ReportarFragment extends Fragment {
 
       return telephonyManager.getLine1Number();
     }
-/*
-    private  void mostrarDialogoOpciones()
-    {
-        final CharSequence[] opciones={"Tomar Foto"};
-        final AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        builder.setTitle("Elija una opcion");
-        builder.setItems(opciones, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(opciones[i].equals("Tomar Foto"))
-                {
-                    abrirCamara();
-                    //llamda para activar la camara
-                }
-            }
-        });
-        builder.show();//muestra el mensaje de dialogo.....-.-..-.-..-.-.-.
-    }
-*/
-/*
-    private void abrirCamara()
-    {
-        File miFile=new File(Environment.getExternalStorageDirectory(),DIRECTORIO_IMAGEN);
-        boolean isCreada=miFile.exists();//verificamos la exixtencia de la CArpeta DIRECTORIO_IMAGEN
-
-        if(isCreada==false){
-            isCreada=miFile.mkdirs();
-        }
-
-        if(isCreada==true){
-            Long consecutivo= System.currentTimeMillis()/100;
-            String nombre=consecutivo.toString()+".jpg";
-
-            path=Environment.getExternalStorageDirectory()+File.separator+DIRECTORIO_IMAGEN
-                    +File.separator+nombre;//indicamos la ruta de almacenamiento
-
-            fileImagen=new File(path);
-
-            Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(fileImagen));
-
-            ////
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N)
-            {
-                String authorities=getContext().getPackageName()+".provider";
-                Uri imageUri= FileProvider.getUriForFile(getContext(),authorities,fileImagen);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            }else
-            {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fileImagen));
-            }
-            startActivityForResult(intent,COD_FOTO);
-
-            ////
-        }
-
-    }
-*/
-
 
     public  void Limpiar()//limpia las casillas de losTextviex de formulario de FragmentReporte..
     {
 
-        Fecharecogido.setText("");
         Descripcion.setText("");
-        //imgFoto.setImageDrawable();
+        //imgFoto.setImageResource(R.drawable.camera);
     }
 
 
