@@ -154,8 +154,8 @@ public class LoginActivity extends AppCompatActivity  {
                                 // do something
                                 //mListData is the array adapter
                                 //enviamos a una nueva ventana
-                              Toast.makeText(getBaseContext(),"dato"+ finalObject,Toast.LENGTH_LONG).show();
-                                /*
+                            //  Toast.makeText(getBaseContext(),"dato"+ finalObject,Toast.LENGTH_LONG).show();
+
                                 if (finalObject.length()>0) {
 
                                     Intent intn = new Intent(LoginActivity.this, conteinerActivity.class);
@@ -164,9 +164,8 @@ public class LoginActivity extends AppCompatActivity  {
                                     Toast.makeText(getBaseContext(), "usuario" + message+finalid, Toast.LENGTH_LONG).show();
                                 }
                                 else {
-
                                     Toast.makeText(getBaseContext(), "Usuario o Contraseña incorrecta", Toast.LENGTH_LONG).show();
-                                    }*/
+                                    }
                             }
                         });
                     }

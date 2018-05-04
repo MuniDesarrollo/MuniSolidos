@@ -205,7 +205,7 @@ public class ReportarFragment extends Fragment {
                     obj.put(PARAM_ESTADO,1);
                     obj.put(PARAM_FECHARECOGIDO,null);
                     obj.put(PARAM_FOTO,ConvertirImagenStrig(bitmap));
-                    obj.put(RUTA_IMAGEN,null);
+                    obj.put(RUTA_IMAGEN,nombreimg);
                     obj.put(PARAM_LATITUD,txtLatitud.getText());
                     obj.put(PARAM_LONGITUD,txtLongitud.getText());
                     obj.put(PARAM_DESCRIPCION,Descripcion.getText());
